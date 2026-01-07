@@ -49,7 +49,7 @@ if ($isWeb) {
 } else {
     // CLI mode
     // Configuration - adjust path relative to script location
-    define('JOOMLA_ROOT', dirname(__DIR__, 3) . '/Joomla_6.0.1-Stable-Full_Package');
+    define('JOOMLA_ROOT', dirname(__DIR__, 3) . '/Joomla_6.0.0-Stable-Full_Package');
     
     // Parameter from CLI args
     $showAll = in_array('--all', $argv ?? []);
