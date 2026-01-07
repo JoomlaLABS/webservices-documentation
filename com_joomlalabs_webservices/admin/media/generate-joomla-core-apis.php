@@ -31,6 +31,11 @@ if ($isWeb) {
     require_once JPATH_BASE . '/includes/defines.php';
     require_once JPATH_BASE . '/includes/framework.php';
     
+    // Disable output buffering to prevent truncation of large YAML output
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+    
     // Set appropriate headers
     header('Content-Type: application/yaml; charset=utf-8');
     header('Cache-Control: no-cache, must-revalidate');
@@ -274,7 +279,52 @@ class JoomlaCoreApisGenerator
                         ];
                     }
                 }
+                
+                // Also look for Route objects inside arrays in custom methods
+                // Pattern: new Route(['METHOD'], $baseName . 'suffix', $controller . '.action')
+                if (preg_match_all('/new\s+Route\s*\(\s*\[[\'"]([A-Z]+)[\'"]\]\s*,\s*\$(\w+)\s*(?:\.\s*[\'"]([^\'"]*)[\'"])?\s*,\s*\$(\w+)\s*\.\s*[\'"]\.([^\'\"]+)[\'"]/s', $methodBody, $routeMatches, PREG_SET_ORDER)) {
+                    // Store method name and its Route patterns for later resolution
+                    foreach ($routeMatches as $rm) {
+                        $routes[] = [
+                            'type' => 'custom_method_route',
+                            'method' => $rm[1],
+                            'baseName_var' => $rm[2],
+                            'suffix' => $rm[3] ?? '',
+                            'controller_var' => $rm[4],
+                            'action' => $rm[5],
+                            'custom_method' => $methodName,
+                        ];
+                    }
+                }
             }
+        }
+        
+        // Resolve custom method routes by finding their invocations in onBeforeApiRoute
+        $customMethodRoutes = array_filter($routes, fn($r) => ($r['type'] ?? '') === 'custom_method_route');
+        if (!empty($customMethodRoutes)) {
+            // Find calls to custom methods in onBeforeApiRoute
+            foreach ($customMethodRoutes as $idx => $customRoute) {
+                $methodName = $customRoute['custom_method'];
+                // Pattern: $this->methodName($router, 'basePath', 'controller', ...)
+                if (preg_match('/\$this->' . preg_quote($methodName, '/') . '\s*\([^,]+,\s*[\'"]([^\'"]+)[\'"]\s*,\s*[\'"]([^\'"]+)[\'"]/s', $content, $invocation)) {
+                    $basePath = $invocation[1];
+                    $controller = $invocation[2];
+                    
+                    // Now create the actual route with resolved values
+                    $routes[] = [
+                        'type' => 'custom_route',
+                        'method' => $customRoute['method'],
+                        'path' => $basePath . $customRoute['suffix'],
+                        'controller' => $controller,
+                        'action' => $customRoute['action'],
+                    ];
+                    
+                    // Mark the template route for removal
+                    unset($routes[$idx]);
+                }
+            }
+            // Clean up template routes
+            $routes = array_values($routes);
         }
         
         // Also parse $router->addRoutes() calls with custom Route objects
@@ -292,6 +342,87 @@ class JoomlaCoreApisGenerator
                     'controller' => $controller,
                     'action' => $action,
                 ];
+            }
+        }
+        
+        // Parse Route objects with variable paths inside foreach loops
+        // Pattern: foreach ... { $var = 'base/path'; new Route([...], $var . '/suffix' OR $var, ...) }
+        if (preg_match_all('/foreach[^{]*\{[^}]*\$(\w+)\s*=\s*[\'"]([^\'\"]+?)[\'"][\s\S]*?new\s+Route\s*\(\s*\[[\'"]]([A-Z,\s]+)[\'\"]\]\s*,\s*\$\1\s*(?:\.\s*[\'"]([^\'"]*)[\'"])?\s*,\s*[\'"]([^\'\"]+)[\'\"]/s', $content, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $m) {
+                $basePath = $m[2];
+                $methods = array_map('trim', explode(',', str_replace(["'", '"'], '', $m[3])));
+                $suffix = $m[4] ?? '';
+                $fullPath = $basePath . $suffix;
+                $controllerAction = $m[5];
+                
+                // Split controller.action
+                if (strpos($controllerAction, '.') !== false) {
+                    [$controller, $action] = explode('.', $controllerAction, 2);
+                    
+                    foreach ($methods as $method) {
+                        $routes[] = [
+                            'type' => 'custom_route',
+                            'method' => $method,
+                            'path' => $fullPath,
+                            'controller' => $controller,
+                            'action' => $action,
+                        ];
+                    }
+                }
+            }
+        }
+        
+        // Parse dynamic Route objects where path is built with variable concatenation
+        // Pattern: $baseName = 'v1/path/' . $item->field; new Route([...], $baseName ...)
+        // We'll look for the base path pattern and create a template route
+        if (preg_match_all('/\$(\w+)\s*=\s*[\'"]([^\'\"]+)[\'\"]\s*\.\s*\$\w+->(\w+);[\s\S]{0,500}?new\s+Route\s*\(\s*\[[\'"]([A-Z]+)[\'"]\]\s*,\s*\$\1\s*((?:\.\s*[\'"][^\'"]*[\'"])?)\s*,\s*(?:\$\w+\s*\.\s*)?[\'"]([^\'\"\.]+)\.([^\'\"]+)[\'"]/s', $content, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $m) {
+                $basePath = $m[2];
+                $dynamicParam = $m[3]; // e.g., 'lang_code'
+                $method = $m[4];
+                $suffix = isset($m[5]) ? trim($m[5], ". '\"") : '';
+                $controller = $m[6];
+                $action = $m[7];
+                
+                // Replace dynamic variable with OpenAPI placeholder
+                $fullPath = $basePath . '{' . $dynamicParam . '}' . $suffix;
+                
+                $routes[] = [
+                    'type' => 'custom_route',
+                    'method' => $method,
+                    'path' => $fullPath,
+                    'controller' => $controller,
+                    'action' => $action,
+                ];
+            }
+        }
+        
+        // Special handling for languages plugin with dynamic foreach-generated routes
+        // This plugin creates routes dynamically in a foreach loop, pattern:
+        // $baseName = 'v1/languages/overrides/{app}/' . $item->lang_code;
+        if (strpos($file, 'languages') !== false && strpos($content, 'createLanguageOverridesRoutes') !== false) {
+            // Add template routes for both site and administrator
+            $apps = ['site', 'administrator'];
+            foreach ($apps as $app) {
+                $basePath = "v1/languages/overrides/$app/{lang_code}";
+                
+                $languageRoutes = [
+                    ['GET', '', 'overrides', 'displayList'],
+                    ['GET', '/:id', 'overrides', 'displayItem'],
+                    ['POST', '', 'overrides', 'add'],
+                    ['PATCH', '/:id', 'overrides', 'edit'],
+                    ['DELETE', '/:id', 'overrides', 'delete'],
+                ];
+                
+                foreach ($languageRoutes as [$method, $suffix, $controller, $action]) {
+                    $routes[] = [
+                        'type' => 'custom_route',
+                        'method' => $method,
+                        'path' => $basePath . $suffix,
+                        'controller' => $controller,
+                        'action' => $action,
+                    ];
+                }
             }
         }
         
@@ -460,6 +591,21 @@ class JoomlaCoreApisGenerator
         ];
         
         return $descriptions[$name] ?? "Filter by $name";
+    }
+    
+    /**
+     * Generate path parameter description
+     */
+    private function generateParamDescription(string $paramName): string
+    {
+        $descriptions = [
+            'id' => 'The ID of the resource',
+            'lang_code' => 'Language code (e.g., en-GB, it-IT)',
+            'component_name' => 'Component name',
+            'app' => 'Application context (site or administrator)',
+        ];
+        
+        return $descriptions[$paramName] ?? ucfirst(str_replace('_', ' ', $paramName));
     }
     
     /**
@@ -685,13 +831,17 @@ class JoomlaCoreApisGenerator
         $viewName = ucfirst($resourceName);
         $view = $component['views'][$viewName] ?? null;
         
+        // Build schema names
+        $listSchemaName = ucfirst($componentName) . $viewName . 'ListItem';
+        $itemSchemaName = ucfirst($componentName) . $viewName . 'Item';
+        
         // GET list
         $this->paths[$path]['get'] = [
             'summary' => "Get list of $resourceName",
             'tags' => [$tag],
             'security' => [['BearerAuth' => []]],
             'parameters' => $this->formatParameters($controller['filters'] ?? []),
-            'responses' => $this->generateListResponse($view),
+            'responses' => $this->generateListResponse($view, $listSchemaName),
         ];
         
         // POST create
@@ -711,7 +861,7 @@ class JoomlaCoreApisGenerator
             'tags' => [$tag],
             'security' => [['BearerAuth' => []]],
             'parameters' => [['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']]],
-            'responses' => $this->generateItemResponse($view),
+            'responses' => $this->generateItemResponse($view, $itemSchemaName),
         ];
         
         $this->paths[$itemPath]['patch'] = [
@@ -813,13 +963,16 @@ class JoomlaCoreApisGenerator
         
         // Build parameters array
         $parameters = [];
-        if (preg_match_all('/:(\w+)/', $path, $matches)) {
+        
+        // Extract path parameters from both :param and {param} syntax
+        if (preg_match_all('/[:{](\w+)[}]?/', $path, $matches)) {
             foreach ($matches[1] as $paramName) {
                 $parameters[] = [
                     'name' => $paramName,
                     'in' => 'path',
                     'required' => true,
                     'schema' => ['type' => $paramName === 'id' ? 'integer' : 'string'],
+                    'description' => $this->generateParamDescription($paramName),
                 ];
             }
         }
@@ -844,9 +997,16 @@ class JoomlaCoreApisGenerator
         
         // Add responses
         if ($method === 'get' && $action === 'displayList') {
-            $operation['responses'] = $this->generateListResponse(null);
+            // Try to find schema name
+            $controllerBase = $route['controller'];
+            $viewName = ucfirst($controllerBase);
+            $listSchemaName = ucfirst($componentName) . $viewName . 'ListItem';
+            $operation['responses'] = $this->generateListResponse(null, $listSchemaName);
         } elseif ($method === 'get' && $action === 'displayItem') {
-            $operation['responses'] = $this->generateItemResponse(null);
+            $controllerBase = $route['controller'];
+            $viewName = ucfirst($controllerBase);
+            $itemSchemaName = ucfirst($componentName) . $viewName . 'Item';
+            $operation['responses'] = $this->generateItemResponse(null, $itemSchemaName);
         } elseif ($method === 'post') {
             $operation['responses'] = $this->generateCreateResponse();
         } elseif ($method === 'patch') {
@@ -896,8 +1056,12 @@ class JoomlaCoreApisGenerator
     /**
      * Generate list response
      */
-    private function generateListResponse(?array $view): array
+    private function generateListResponse(?array $view, ?string $schemaName = null): array
     {
+        $itemSchema = $schemaName && isset($this->schemas[$schemaName]) 
+            ? ['$ref' => '#/components/schemas/' . $schemaName]
+            : ['type' => 'object'];
+        
         return [
             '200' => [
                 'description' => 'Successful response',
@@ -908,7 +1072,7 @@ class JoomlaCoreApisGenerator
                             'properties' => [
                                 'data' => [
                                     'type' => 'array',
-                                    'items' => ['type' => 'object'],
+                                    'items' => $itemSchema,
                                 ],
                             ],
                         ],
@@ -923,14 +1087,18 @@ class JoomlaCoreApisGenerator
     /**
      * Generate item response
      */
-    private function generateItemResponse(?array $view): array
+    private function generateItemResponse(?array $view, ?string $schemaName = null): array
     {
+        $schema = $schemaName && isset($this->schemas[$schemaName])
+            ? ['$ref' => '#/components/schemas/' . $schemaName]
+            : ['type' => 'object'];
+        
         return [
             '200' => [
                 'description' => 'Successful response',
                 'content' => [
                     'application/vnd.api+json' => [
-                        'schema' => ['type' => 'object'],
+                        'schema' => $schema,
                     ],
                 ],
             ],
@@ -1002,8 +1170,7 @@ class JoomlaCoreApisGenerator
      */
     public function buildSchemas(): void
     {
-        // TODO: Generate schemas from view fields
-        // Placeholder for now
+        // Error schema (standard Joomla error format)
         $this->schemas['Error'] = [
             'type' => 'object',
             'properties' => [
@@ -1012,14 +1179,123 @@ class JoomlaCoreApisGenerator
                     'items' => [
                         'type' => 'object',
                         'properties' => [
-                            'status' => ['type' => 'string'],
                             'title' => ['type' => 'string'],
-                            'detail' => ['type' => 'string'],
+                            'code' => ['type' => 'string'],
                         ],
                     ],
                 ],
             ],
         ];
+        
+        // Generate schemas from view fields
+        foreach ($this->components as $shortName => $component) {
+            // Check if should include this component
+            if (!$this->includeAll && !isset($this->plugins[$shortName])) {
+                continue;
+            }
+            
+            foreach ($component['views'] as $viewName => $view) {
+                $fields = $view['fields'] ?? [];
+                
+                // Generate schema for list items
+                if (!empty($fields['list'])) {
+                    $schemaName = ucfirst($shortName) . ucfirst($viewName) . 'ListItem';
+                    $this->schemas[$schemaName] = $this->generateSchemaFromFields($fields['list']);
+                }
+                
+                // Generate schema for single item
+                if (!empty($fields['item'])) {
+                    $schemaName = ucfirst($shortName) . ucfirst($viewName) . 'Item';
+                    $this->schemas[$schemaName] = $this->generateSchemaFromFields($fields['item']);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Generate schema properties from field list
+     */
+    private function generateSchemaFromFields(array $fields): array
+    {
+        $properties = [];
+        
+        foreach ($fields as $fieldName) {
+            $properties[$fieldName] = [
+                'type' => $this->guessFieldType($fieldName),
+            ];
+            
+            // Add description for common fields
+            $description = $this->getFieldDescription($fieldName);
+            if ($description) {
+                $properties[$fieldName]['description'] = $description;
+            }
+        }
+        
+        return [
+            'type' => 'object',
+            'properties' => $properties,
+        ];
+    }
+    
+    /**
+     * Guess field type from field name
+     */
+    private function guessFieldType(string $fieldName): string
+    {
+        // Integer fields
+        if (preg_match('/^(id|.*_id|catid|parent_id|lft|rgt|level|ordering|hits|access|state|featured|checked_out|version)$/i', $fieldName)) {
+            return 'integer';
+        }
+        
+        // Boolean fields
+        if (preg_match('/^(published|enabled|featured|checked_out|home)$/i', $fieldName)) {
+            return 'boolean';
+        }
+        
+        // Date/time fields
+        if (preg_match('/^(.*_date|created|modified|checked_out_time|publish_up|publish_down)$/i', $fieldName)) {
+            return 'string'; // ISO 8601 date string
+        }
+        
+        // Array/object fields
+        if (preg_match('/^(params|metadata|images|urls|attribs)$/i', $fieldName)) {
+            return 'object';
+        }
+        
+        // Text fields (everything else)
+        return 'string';
+    }
+    
+    /**
+     * Get description for common field names
+     */
+    private function getFieldDescription(string $fieldName): ?string
+    {
+        $descriptions = [
+            'id' => 'Unique identifier',
+            'title' => 'Item title',
+            'alias' => 'URL-friendly alias',
+            'state' => 'Publication state (1=published, 0=unpublished, -2=trashed)',
+            'catid' => 'Category ID',
+            'created' => 'Creation date (ISO 8601)',
+            'created_by' => 'User ID who created this item',
+            'modified' => 'Last modification date (ISO 8601)',
+            'modified_by' => 'User ID who last modified this item',
+            'checked_out' => 'User ID who checked out this item (0 if not checked out)',
+            'checked_out_time' => 'Date/time when item was checked out (ISO 8601)',
+            'publish_up' => 'Start publishing date (ISO 8601)',
+            'publish_down' => 'Stop publishing date (ISO 8601)',
+            'access' => 'Access level ID',
+            'ordering' => 'Display order',
+            'language' => 'Language code (* for all)',
+            'hits' => 'Number of views',
+            'featured' => 'Featured status',
+            'params' => 'Component parameters (JSON)',
+            'metadata' => 'Metadata (JSON)',
+            'version' => 'Version number',
+        ];
+        
+        return $descriptions[$fieldName] ?? null;
     }
     
     /**
@@ -1216,6 +1492,12 @@ YAML;
         $yaml = '';
         $spaces = str_repeat(' ', $indent * 2);
         
+        // Handle $ref (must be the only property)
+        if (isset($schema['$ref'])) {
+            $yaml .= $spaces . "\$ref: '{$schema['$ref']}'\n";
+            return $yaml;
+        }
+        
         if (isset($schema['type'])) {
             $yaml .= $spaces . "type: {$schema['type']}\n";
         }
@@ -1245,17 +1527,19 @@ YAML;
         $this->scanComponents();
         $this->scanPlugins();
         
-        // Build OpenAPI structure
+        // Build OpenAPI structure (schemas first so they can be referenced in paths)
+        $this->buildSchemas();
         $this->buildTags();
         $this->buildPaths();
-        $this->buildSchemas();
         
         // Generate YAML
         $yaml = $this->generateYaml();
         
         if ($isWeb) {
             // Web request: output YAML directly
+            // Use flush to ensure all content is sent immediately
             echo $yaml;
+            flush();
         } else {
             // CLI: Write to file with UTF-8 encoding (no BOM)
             $outputFile = __DIR__ . '/joomla-core-apis-generated.yaml';

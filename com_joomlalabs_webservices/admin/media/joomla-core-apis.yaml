@@ -87,8 +87,16 @@ tags:
     description: Search for languages
   - name: Languages|Overrides|Search|Cache|Refresh
     description: Refresh for languages
+  - name: Languages|Overrides|Site
+    description: Site for languages
+  - name: Languages|Overrides|Administrator
+    description: Administrator for languages
   - name: Media
     description: Operations related to media
+  - name: Media|Adapters
+    description: Adapters for media
+  - name: Media|Files
+    description: Files for media
   - name: Menus|Site
     description: Site for menus
   - name: Menus|Administrator
@@ -139,8 +147,8 @@ tags:
     description: Levels for users
   - name: Users|Fields
     description: Custom fields for users
-  - name: Users|Fields|Users
-    description: Users fields for users
+  - name: Users|Fields|Groups
+    description: Groups fields for users
 
 paths:
   /banners:
@@ -174,7 +182,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/BannersBannersListItem'
         '401':
           description: Unauthorized
         '500':
@@ -221,7 +229,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/BannersBannersItem'
         '401':
           description: Unauthorized
         '404':
@@ -311,7 +319,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/BannersClientsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -358,7 +366,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/BannersClientsItem'
         '401':
           description: Unauthorized
         '404':
@@ -553,6 +561,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -581,6 +590,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -603,6 +613,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       requestBody:
@@ -697,6 +708,7 @@ paths:
         - name: component_name
           in: path
           required: true
+          description: Component name
           schema:
             type: string
         - name: page[limit]
@@ -737,6 +749,7 @@ paths:
         - name: component_name
           in: path
           required: true
+          description: Component name
           schema:
             type: string
       requestBody:
@@ -789,7 +802,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/ContactContactsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -836,7 +849,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ContactContactsItem'
         '401':
           description: Unauthorized
         '404':
@@ -1781,6 +1794,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       requestBody:
@@ -1811,6 +1825,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -1839,6 +1854,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -1861,6 +1877,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       requestBody:
@@ -1976,7 +1993,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/ContentArticlesListItem'
         '401':
           description: Unauthorized
         '500':
@@ -2023,7 +2040,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ContentArticlesItem'
         '401':
           description: Unauthorized
         '404':
@@ -2226,7 +2243,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/ContentArticlesListItem'
         '401':
           description: Unauthorized
         '500':
@@ -2273,7 +2290,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ContentArticlesItem'
         '401':
           description: Unauthorized
         '404':
@@ -2476,7 +2493,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/ContentArticlesListItem'
         '401':
           description: Unauthorized
         '500':
@@ -2523,7 +2540,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ContentArticlesItem'
         '401':
           description: Unauthorized
         '404':
@@ -2718,6 +2735,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -2746,6 +2764,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -2768,6 +2787,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       requestBody:
@@ -2835,7 +2855,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/InstallerManageListItem'
         '401':
           description: Unauthorized
         '500':
@@ -3108,6 +3128,29 @@ paths:
         '500':
           description: Server error
   /languages/overrides/search:
+    get:
+      summary: DisplayList
+      tags:
+        - Languages|Overrides|Search
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
     post:
       summary: Search
       tags:
@@ -3130,6 +3173,87 @@ paths:
           description: Unauthorized
         '422':
           description: Validation error
+        '500':
+          description: Server error
+  /languages/overrides/search/{id}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Languages|Overrides|Search
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Edit
+      tags:
+        - Languages|Overrides|Search
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete
+      tags:
+        - Languages|Overrides|Search
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
         '500':
           description: Server error
   /languages/overrides/search/cache/refresh:
@@ -3188,7 +3312,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/LanguagesLanguagesListItem'
         '401':
           description: Unauthorized
         '500':
@@ -3215,6 +3339,614 @@ paths:
           description: Unauthorized
         '422':
           description: Validation error
+        '500':
+          description: Server error
+  /languages/overrides/site/{lang_code}:
+    get:
+      summary: DisplayList
+      tags:
+        - Languages|Overrides|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: filter[language]
+          in: query
+          description: Language code
+          schema:
+            type: string
+        - name: filter[client]
+          in: query
+          description: Filter by client
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LanguagesOverridesListItem'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Add
+      tags:
+        - Languages|Overrides|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /languages/overrides/site/{lang_code}/{id}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Languages|Overrides|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/LanguagesOverridesItem'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Edit
+      tags:
+        - Languages|Overrides|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete
+      tags:
+        - Languages|Overrides|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /languages/overrides/administrator/{lang_code}:
+    get:
+      summary: DisplayList
+      tags:
+        - Languages|Overrides|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: filter[language]
+          in: query
+          description: Language code
+          schema:
+            type: string
+        - name: filter[client]
+          in: query
+          description: Filter by client
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LanguagesOverridesListItem'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Add
+      tags:
+        - Languages|Overrides|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /languages/overrides/administrator/{lang_code}/{id}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Languages|Overrides|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/LanguagesOverridesItem'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Edit
+      tags:
+        - Languages|Overrides|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete
+      tags:
+        - Languages|Overrides|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang_code
+          in: path
+          required: true
+          description: Language code (e.g., en-GB, it-IT)
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /media/adapters:
+    get:
+      summary: DisplayList
+      tags:
+        - Media|Adapters
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MediaAdaptersListItem'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /media/adapters/{id}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Media|Adapters
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/MediaAdaptersItem'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /media/files:
+    get:
+      summary: DisplayList
+      tags:
+        - Media|Files
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MediaMediaListItem'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Add
+      tags:
+        - Media|Files
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /media/files/{path}/:
+    get:
+      summary: DisplayList
+      tags:
+        - Media|Files
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: path
+          in: path
+          required: true
+          description: Path
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MediaMediaListItem'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /media/files/{path}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Media|Files
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: path
+          in: path
+          required: true
+          description: Path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/MediaMediaItem'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Edit
+      tags:
+        - Media|Files
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: path
+          in: path
+          required: true
+          description: Path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete
+      tags:
+        - Media|Files
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: path
+          in: path
+          required: true
+          description: Path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
         '500':
           description: Server error
   /menus/site:
@@ -3542,7 +4274,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/MenusItemsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -3589,7 +4321,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/MenusItemsItem'
         '401':
           description: Unauthorized
         '404':
@@ -3689,7 +4421,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/MenusItemsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -3736,7 +4468,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/MenusItemsItem'
         '401':
           description: Unauthorized
         '404':
@@ -3856,7 +4588,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/MessagesMessagesListItem'
         '401':
           description: Unauthorized
         '500':
@@ -3903,7 +4635,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/MessagesMessagesItem'
         '401':
           description: Unauthorized
         '404':
@@ -4297,7 +5029,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/NewsfeedsFeedsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -4344,7 +5076,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/NewsfeedsFeedsItem'
         '401':
           description: Unauthorized
         '404':
@@ -4579,7 +5311,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/PluginsPluginsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -4595,6 +5327,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -4603,7 +5336,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/PluginsPluginsItem'
         '401':
           description: Unauthorized
         '404':
@@ -4620,6 +5353,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       requestBody:
@@ -4672,7 +5406,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/PrivacyRequestsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -4712,6 +5446,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -4720,7 +5455,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/PrivacyRequestsItem'
         '401':
           description: Unauthorized
         '404':
@@ -4738,6 +5473,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -4778,7 +5514,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/PrivacyConsentsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -4794,6 +5530,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: The ID of the resource
           schema:
             type: integer
       responses:
@@ -4802,7 +5539,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/PrivacyConsentsItem'
         '401':
           description: Unauthorized
         '404':
@@ -4982,7 +5719,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/TagsTagsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -5029,7 +5766,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/TagsTagsItem'
         '401':
           description: Unauthorized
         '404':
@@ -5433,7 +6170,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/UsersUsersListItem'
         '401':
           description: Unauthorized
         '500':
@@ -5480,7 +6217,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/UsersUsersItem'
         '401':
           description: Unauthorized
         '404':
@@ -5570,7 +6307,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/UsersGroupsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -5617,7 +6354,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/UsersGroupsItem'
         '401':
           description: Unauthorized
         '404':
@@ -5707,7 +6444,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/UsersLevelsListItem'
         '401':
           description: Unauthorized
         '500':
@@ -5754,7 +6491,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/UsersLevelsItem'
         '401':
           description: Unauthorized
         '404':
@@ -5832,7 +6569,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/UsersUsersListItem'
         '401':
           description: Unauthorized
         '500':
@@ -5879,7 +6616,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/UsersUsersItem'
         '401':
           description: Unauthorized
         '404':
@@ -5942,7 +6679,7 @@ paths:
     get:
       summary: Get list of users
       tags:
-        - Users|Fields|Users
+        - Users|Fields|Groups
       security:
         - BearerAuth: []
       parameters:
@@ -5969,7 +6706,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
+                      $ref: '#/components/schemas/UsersUsersListItem'
         '401':
           description: Unauthorized
         '500':
@@ -5977,7 +6714,7 @@ paths:
     post:
       summary: Create new item in users
       tags:
-        - Users|Fields|Users
+        - Users|Fields|Groups
       security:
         - BearerAuth: []
       requestBody:
@@ -6001,7 +6738,7 @@ paths:
     get:
       summary: Get single item from users
       tags:
-        - Users|Fields|Users
+        - Users|Fields|Groups
       security:
         - BearerAuth: []
       parameters:
@@ -6016,7 +6753,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: object
+                $ref: '#/components/schemas/UsersUsersItem'
         '401':
           description: Unauthorized
         '404':
@@ -6026,7 +6763,7 @@ paths:
     patch:
       summary: Update item in users
       tags:
-        - Users|Fields|Users
+        - Users|Fields|Groups
       security:
         - BearerAuth: []
       parameters:
@@ -6057,7 +6794,7 @@ paths:
     delete:
       summary: Delete item from users
       tags:
-        - Users|Fields|Users
+        - Users|Fields|Groups
       security:
         - BearerAuth: []
       parameters:
@@ -6093,9 +6830,1817 @@ components:
           items:
             type: object
             properties:
-              status:
-                type: string
               title:
                 type: string
-              detail:
+              code:
                 type: string
+    BannersBannersListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        alias:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        catid:
+          type: integer
+        clicks:
+          type: string
+        metakey:
+          type: string
+        sticky:
+          type: string
+        impmade:
+          type: string
+        imptotal:
+          type: string
+        state:
+          type: integer
+        ordering:
+          type: integer
+        purchase_type:
+          type: string
+        language:
+          type: string
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        category_title:
+          type: string
+        client_name:
+          type: string
+        client_purchase_type:
+          type: string
+    BannersBannersItem:
+      type: object
+      properties:
+        typeAlias:
+          type: string
+        id:
+          type: integer
+        cid:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        alias:
+          type: string
+        imptotal:
+          type: string
+        impmade:
+          type: string
+        clicks:
+          type: string
+        clickurl:
+          type: string
+        state:
+          type: integer
+        catid:
+          type: integer
+        description:
+          type: string
+        custombannercode:
+          type: string
+        sticky:
+          type: string
+        ordering:
+          type: integer
+        metakey:
+          type: string
+        params:
+          type: object
+        own_prefix:
+          type: string
+        metakey_prefix:
+          type: string
+        purchase_type:
+          type: string
+        track_clicks:
+          type: string
+        track_impressions:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        reset:
+          type: string
+        created:
+          type: string
+        language:
+          type: string
+        created_by:
+          type: string
+        created_by_alias:
+          type: string
+        modified:
+          type: string
+        modified_by:
+          type: string
+        version:
+          type: integer
+        contenthistoryHelper:
+          type: string
+    BannersClientsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        contact:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        state:
+          type: integer
+        metakey:
+          type: string
+        purchase_type:
+          type: string
+        nbanners:
+          type: string
+        editor:
+          type: string
+        count_published:
+          type: string
+        count_unpublished:
+          type: string
+        count_trashed:
+          type: string
+        count_archived:
+          type: string
+    BannersClientsItem:
+      type: object
+      properties:
+        typeAlias:
+          type: string
+        id:
+          type: integer
+        checked_out_time:
+          type: string
+        name:
+          type: string
+        contact:
+          type: string
+        email:
+          type: string
+        checked_out:
+          type: integer
+        extrainfo:
+          type: string
+        state:
+          type: integer
+        metakey:
+          type: string
+        own_prefix:
+          type: string
+        metakey_prefix:
+          type: string
+        purchase_type:
+          type: string
+        track_clicks:
+          type: string
+        track_impressions:
+          type: string
+    CategoriesCategoriesListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        alias:
+          type: string
+        note:
+          type: string
+        published:
+          type: boolean
+        access:
+          type: integer
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        created_user_id:
+          type: integer
+        parent_id:
+          type: integer
+        level:
+          type: integer
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        language:
+          type: string
+        language_title:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        access_level:
+          type: string
+        author_name:
+          type: string
+        count_trashed:
+          type: string
+        count_unpublished:
+          type: string
+        count_published:
+          type: string
+        count_archived:
+          type: string
+        params:
+          type: object
+        description:
+          type: string
+    CategoriesCategoriesItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        alias:
+          type: string
+        note:
+          type: string
+        published:
+          type: boolean
+        access:
+          type: integer
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        created_user_id:
+          type: integer
+        parent_id:
+          type: integer
+        level:
+          type: integer
+        extension:
+          type: string
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        language:
+          type: string
+        language_title:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        access_level:
+          type: string
+        author_name:
+          type: string
+        count_trashed:
+          type: string
+        count_unpublished:
+          type: string
+        count_published:
+          type: string
+        count_archived:
+          type: string
+        params:
+          type: object
+        description:
+          type: string
+    ContactContactsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        alias:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        created:
+          type: string
+        created_by:
+          type: string
+        created_by_alias:
+          type: string
+        modified:
+          type: string
+        modified_by:
+          type: string
+        image:
+          type: string
+        tags:
+          type: string
+        user_id:
+          type: integer
+    ContactContactsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        alias:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        created:
+          type: string
+        created_by:
+          type: string
+        created_by_alias:
+          type: string
+        modified:
+          type: string
+        modified_by:
+          type: string
+        image:
+          type: string
+        tags:
+          type: string
+        featured:
+          type: integer
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        version:
+          type: integer
+        hits:
+          type: integer
+        metakey:
+          type: string
+        metadesc:
+          type: string
+        metadata:
+          type: object
+        con_position:
+          type: string
+        address:
+          type: string
+        suburb:
+          type: string
+        state:
+          type: integer
+        country:
+          type: string
+        postcode:
+          type: string
+        telephone:
+          type: string
+        fax:
+          type: string
+        misc:
+          type: string
+        email_to:
+          type: string
+        default_con:
+          type: string
+        user_id:
+          type: integer
+        access:
+          type: integer
+        mobile:
+          type: string
+        webpage:
+          type: string
+        sortname1:
+          type: string
+        sortname2:
+          type: string
+        sortname3:
+          type: string
+    ContentArticlesListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        typeAlias:
+          type: string
+        asset_id:
+          type: integer
+        title:
+          type: string
+        text:
+          type: string
+        tags:
+          type: string
+        language:
+          type: string
+        state:
+          type: integer
+        category:
+          type: string
+        images:
+          type: object
+        metakey:
+          type: string
+        metadesc:
+          type: string
+        metadata:
+          type: object
+        access:
+          type: integer
+        featured:
+          type: integer
+        alias:
+          type: string
+        note:
+          type: string
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        urls:
+          type: object
+        created:
+          type: string
+        created_by:
+          type: string
+        created_by_alias:
+          type: string
+        modified:
+          type: string
+        hits:
+          type: integer
+        version:
+          type: integer
+        featured_up:
+          type: string
+        featured_down:
+          type: string
+    ContentArticlesItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        typeAlias:
+          type: string
+        asset_id:
+          type: integer
+        title:
+          type: string
+        text:
+          type: string
+        tags:
+          type: string
+        language:
+          type: string
+        state:
+          type: integer
+        category:
+          type: string
+        images:
+          type: object
+        metakey:
+          type: string
+        metadesc:
+          type: string
+        metadata:
+          type: object
+        access:
+          type: integer
+        featured:
+          type: integer
+        alias:
+          type: string
+        note:
+          type: string
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        urls:
+          type: object
+        created:
+          type: string
+        created_by:
+          type: string
+        created_by_alias:
+          type: string
+        modified:
+          type: string
+        modified_by:
+          type: string
+        hits:
+          type: integer
+        version:
+          type: integer
+        featured_up:
+          type: string
+        featured_down:
+          type: string
+    ContenthistoryHistoryListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        ucm_item_id:
+          type: integer
+        ucm_type_id:
+          type: integer
+        version_note:
+          type: string
+        save_date:
+          type: string
+        editor_user_id:
+          type: integer
+        character_count:
+          type: string
+        sha1_hash:
+          type: string
+        version_data:
+          type: string
+        keep_forever:
+          type: string
+        editor:
+          type: string
+    FieldsFieldsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        name:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        note:
+          type: string
+        state:
+          type: integer
+        access:
+          type: integer
+        created_time:
+          type: string
+        created_user_id:
+          type: integer
+        ordering:
+          type: integer
+        language:
+          type: string
+        fieldparams:
+          type: string
+        params:
+          type: object
+        type:
+          type: string
+        default_value:
+          type: string
+        context:
+          type: string
+        group_id:
+          type: integer
+        label:
+          type: string
+        description:
+          type: string
+        required:
+          type: string
+        language_title:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        access_level:
+          type: string
+        author_name:
+          type: string
+        group_title:
+          type: string
+        group_access:
+          type: string
+        group_state:
+          type: string
+        group_note:
+          type: string
+    FieldsFieldsItem:
+      type: object
+      properties:
+        typeAlias:
+          type: string
+        id:
+          type: integer
+        asset_id:
+          type: integer
+        context:
+          type: string
+        group_id:
+          type: integer
+        title:
+          type: string
+        name:
+          type: string
+        label:
+          type: string
+        default_value:
+          type: string
+        type:
+          type: string
+        note:
+          type: string
+        description:
+          type: string
+        state:
+          type: integer
+        required:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        ordering:
+          type: integer
+        params:
+          type: object
+        fieldparams:
+          type: string
+        language:
+          type: string
+        created_time:
+          type: string
+        created_user_id:
+          type: integer
+        modified_time:
+          type: string
+        modified_by:
+          type: string
+        access:
+          type: integer
+        assigned_cat_ids:
+          type: string
+    FieldsGroupsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        name:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        note:
+          type: string
+        state:
+          type: integer
+        access:
+          type: integer
+        created_time:
+          type: string
+        created_user_id:
+          type: integer
+        ordering:
+          type: integer
+        language:
+          type: string
+        fieldparams:
+          type: string
+        params:
+          type: object
+        type:
+          type: string
+        default_value:
+          type: string
+        context:
+          type: string
+        group_id:
+          type: integer
+        label:
+          type: string
+        description:
+          type: string
+        required:
+          type: string
+        language_title:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        access_level:
+          type: string
+        author_name:
+          type: string
+        group_title:
+          type: string
+        group_access:
+          type: string
+        group_state:
+          type: string
+        group_note:
+          type: string
+    FieldsGroupsItem:
+      type: object
+      properties:
+        typeAlias:
+          type: string
+        id:
+          type: integer
+        asset_id:
+          type: integer
+        context:
+          type: string
+        title:
+          type: string
+        note:
+          type: string
+        description:
+          type: string
+        state:
+          type: integer
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        ordering:
+          type: integer
+        params:
+          type: object
+        language:
+          type: string
+        created:
+          type: string
+        created_by:
+          type: string
+        modified:
+          type: string
+        modified_by:
+          type: string
+        access:
+          type: integer
+        type:
+          type: string
+    InstallerLanguagesListItem:
+      type: object
+      properties:
+        name:
+          type: string
+        element:
+          type: string
+        version:
+          type: integer
+        type:
+          type: string
+        detailsurl:
+          type: string
+    InstallerManageListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        version:
+          type: integer
+        folder:
+          type: string
+        status:
+          type: string
+        client_id:
+          type: integer
+    LanguagesLanguagesListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        asset_id:
+          type: integer
+        lang_code:
+          type: string
+        title:
+          type: string
+        title_native:
+          type: string
+        sef:
+          type: string
+        image:
+          type: string
+        description:
+          type: string
+        metakey:
+          type: string
+        metadesc:
+          type: string
+        sitename:
+          type: string
+        published:
+          type: boolean
+        access:
+          type: integer
+        ordering:
+          type: integer
+        access_level:
+          type: string
+        home:
+          type: boolean
+    LanguagesLanguagesItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        asset_id:
+          type: integer
+        lang_code:
+          type: string
+        title:
+          type: string
+        title_native:
+          type: string
+        sef:
+          type: string
+        image:
+          type: string
+        description:
+          type: string
+        metakey:
+          type: string
+        metadesc:
+          type: string
+        sitename:
+          type: string
+        published:
+          type: boolean
+        access:
+          type: integer
+        ordering:
+          type: integer
+        access_level:
+          type: string
+        home:
+          type: boolean
+    LanguagesOverridesListItem:
+      type: object
+      properties:
+        value:
+          type: string
+    LanguagesOverridesItem:
+      type: object
+      properties:
+        value:
+          type: string
+    LanguagesStringsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        string:
+          type: string
+        file:
+          type: string
+    MediaAdaptersListItem:
+      type: object
+      properties:
+        provider_id:
+          type: integer
+        name:
+          type: string
+        path:
+          type: string
+    MediaAdaptersItem:
+      type: object
+      properties:
+        provider_id:
+          type: integer
+        name:
+          type: string
+        path:
+          type: string
+    MediaMediaListItem:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        extension:
+          type: string
+        size:
+          type: string
+        mime_type:
+          type: string
+        width:
+          type: string
+        height:
+          type: string
+        create_date:
+          type: string
+        create_date_formatted:
+          type: string
+        modified_date:
+          type: string
+        modified_date_formatted:
+          type: string
+        thumb_path:
+          type: string
+        adapter:
+          type: string
+        content:
+          type: string
+        url:
+          type: string
+        tempUrl:
+          type: string
+    MediaMediaItem:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        extension:
+          type: string
+        size:
+          type: string
+        mime_type:
+          type: string
+        width:
+          type: string
+        height:
+          type: string
+        create_date:
+          type: string
+        create_date_formatted:
+          type: string
+        modified_date:
+          type: string
+        modified_date_formatted:
+          type: string
+        thumb_path:
+          type: string
+        adapter:
+          type: string
+        content:
+          type: string
+        url:
+          type: string
+        tempUrl:
+          type: string
+    MenusItemsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        menutype:
+          type: string
+        title:
+          type: string
+        alias:
+          type: string
+        note:
+          type: string
+        path:
+          type: string
+        link:
+          type: string
+        type:
+          type: string
+        parent_id:
+          type: integer
+        level:
+          type: integer
+        a.published:
+          type: string
+        component_id:
+          type: integer
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        browserNav:
+          type: string
+        access:
+          type: integer
+        img:
+          type: string
+        template_style_id:
+          type: integer
+        params:
+          type: object
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        home:
+          type: boolean
+        language:
+          type: string
+        client_id:
+          type: integer
+        enabled:
+          type: boolean
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        published:
+          type: boolean
+        language_title:
+          type: string
+        language_image:
+          type: string
+        language_sef:
+          type: string
+        editor:
+          type: string
+        componentname:
+          type: string
+        access_level:
+          type: string
+        menutype_id:
+          type: integer
+        menutype_title:
+          type: string
+        association:
+          type: string
+        name:
+          type: string
+    MenusItemsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        level:
+          type: integer
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        alias:
+          type: string
+        typeAlias:
+          type: string
+        menutype:
+          type: string
+        title:
+          type: string
+        note:
+          type: string
+        path:
+          type: string
+        link:
+          type: string
+        type:
+          type: string
+        published:
+          type: boolean
+        component_id:
+          type: integer
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        browserNav:
+          type: string
+        access:
+          type: integer
+        img:
+          type: string
+        template_style_id:
+          type: integer
+        params:
+          type: object
+        home:
+          type: boolean
+        language:
+          type: string
+        client_id:
+          type: integer
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        request:
+          type: string
+        associations:
+          type: string
+        menuordering:
+          type: string
+    MenusMenusListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        asset_id:
+          type: integer
+        menutype:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        client_id:
+          type: integer
+    MenusMenusItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        menutype:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        client_id:
+          type: integer
+        count_published:
+          type: string
+        count_unpublished:
+          type: string
+        count_trashed:
+          type: string
+    MessagesMessagesListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id_from:
+          type: string
+        user_id_to:
+          type: string
+        date_time:
+          type: string
+        priority:
+          type: string
+        subject:
+          type: string
+        message:
+          type: string
+        state:
+          type: integer
+        user_from:
+          type: string
+    MessagesMessagesItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id_from:
+          type: string
+        user_id_to:
+          type: string
+        date_time:
+          type: string
+        priority:
+          type: string
+        subject:
+          type: string
+        message:
+          type: string
+        state:
+          type: integer
+        user_from:
+          type: string
+    ModulesModulesListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        note:
+          type: string
+        position:
+          type: string
+        module:
+          type: string
+        language:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        published:
+          type: boolean
+        enabled:
+          type: boolean
+        access:
+          type: integer
+        ordering:
+          type: integer
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        language_title:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        access_level:
+          type: string
+        pages:
+          type: string
+        name:
+          type: string
+    ModulesModulesItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        typeAlias:
+          type: string
+        asset_id:
+          type: integer
+        title:
+          type: string
+        note:
+          type: string
+        content:
+          type: string
+        ordering:
+          type: integer
+        position:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        published:
+          type: boolean
+        module:
+          type: string
+        access:
+          type: integer
+        showtitle:
+          type: string
+        params:
+          type: object
+        client_id:
+          type: integer
+        language:
+          type: string
+        assigned:
+          type: string
+        assignment:
+          type: string
+        xml:
+          type: string
+    NewsfeedsFeedsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        alias:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        category:
+          type: string
+        numarticles:
+          type: string
+        cache_time:
+          type: string
+        created_by:
+          type: string
+        published:
+          type: boolean
+        access:
+          type: integer
+        ordering:
+          type: integer
+        language:
+          type: string
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        language_title:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        access_level:
+          type: string
+        category_title:
+          type: string
+        modified_by:
+          type: string
+    NewsfeedsFeedsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        category:
+          type: string
+        name:
+          type: string
+        alias:
+          type: string
+        link:
+          type: string
+        published:
+          type: boolean
+        numarticles:
+          type: string
+        cache_time:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        ordering:
+          type: integer
+        rtl:
+          type: string
+        access:
+          type: integer
+        language:
+          type: string
+        params:
+          type: object
+        created:
+          type: string
+        created_by:
+          type: string
+        created_by_alias:
+          type: string
+        modified:
+          type: string
+        modified_by:
+          type: string
+        metakey:
+          type: string
+        metadesc:
+          type: string
+        metadata:
+          type: object
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+        description:
+          type: string
+        version:
+          type: integer
+        hits:
+          type: integer
+        images:
+          type: object
+        tags:
+          type: string
+    PluginsPluginsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        element:
+          type: string
+        folder:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        enabled:
+          type: boolean
+        access:
+          type: integer
+        ordering:
+          type: integer
+        editor:
+          type: string
+        access_level:
+          type: string
+    PluginsPluginsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        element:
+          type: string
+        changelogurl:
+          type: string
+        folder:
+          type: string
+        client_id:
+          type: integer
+        enabled:
+          type: boolean
+        access:
+          type: integer
+        protected:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        ordering:
+          type: integer
+        state:
+          type: integer
+    PrivacyConsentsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        state:
+          type: integer
+        created:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        remind:
+          type: string
+        token:
+          type: string
+        username:
+          type: string
+    PrivacyConsentsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        state:
+          type: integer
+        created:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        remind:
+          type: string
+        token:
+          type: string
+        username:
+          type: string
+    PrivacyRequestsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        requested_at:
+          type: string
+        status:
+          type: string
+        request_type:
+          type: string
+    PrivacyRequestsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        typeAlias:
+          type: string
+        email:
+          type: string
+        requested_at:
+          type: string
+        status:
+          type: string
+        request_type:
+          type: string
+    RedirectRedirectListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        old_url:
+          type: string
+        new_url:
+          type: string
+        referer:
+          type: string
+        comment:
+          type: string
+        hits:
+          type: integer
+        published:
+          type: boolean
+        created_date:
+          type: string
+        modified_date:
+          type: string
+        header:
+          type: string
+    RedirectRedirectItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        old_url:
+          type: string
+        new_url:
+          type: string
+        referer:
+          type: string
+        comment:
+          type: string
+        hits:
+          type: integer
+        published:
+          type: boolean
+        created_date:
+          type: string
+        modified_date:
+          type: string
+        header:
+          type: string
+    TagsTagsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        alias:
+          type: string
+        note:
+          type: string
+        published:
+          type: boolean
+        access:
+          type: integer
+        description:
+          type: string
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        created_user_id:
+          type: integer
+        path:
+          type: string
+        parent_id:
+          type: integer
+        level:
+          type: integer
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        language:
+          type: string
+        language_title:
+          type: string
+        language_image:
+          type: string
+        editor:
+          type: string
+        author_name:
+          type: string
+        access_title:
+          type: string
+    TagsTagsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        level:
+          type: integer
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        alias:
+          type: string
+        typeAlias:
+          type: string
+        path:
+          type: string
+        title:
+          type: string
+        note:
+          type: string
+        description:
+          type: string
+        published:
+          type: boolean
+        checked_out:
+          type: integer
+        checked_out_time:
+          type: string
+        access:
+          type: integer
+        params:
+          type: object
+        metadesc:
+          type: string
+        metakey:
+          type: string
+        metadata:
+          type: object
+        created_user_id:
+          type: integer
+        created_time:
+          type: string
+        created_by_alias:
+          type: string
+        modified_user_id:
+          type: integer
+        modified_time:
+          type: string
+        images:
+          type: object
+        urls:
+          type: object
+        hits:
+          type: integer
+        language:
+          type: string
+        version:
+          type: integer
+        publish_up:
+          type: string
+        publish_down:
+          type: string
+    TemplatesStylesListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        template:
+          type: string
+        title:
+          type: string
+        home:
+          type: boolean
+        client_id:
+          type: integer
+        language_title:
+          type: string
+        image:
+          type: string
+        language_sef:
+          type: string
+        assigned:
+          type: string
+        e_id:
+          type: integer
+    TemplatesStylesItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        template:
+          type: string
+        client_id:
+          type: integer
+        home:
+          type: boolean
+        title:
+          type: string
+        params:
+          type: object
+        xml:
+          type: string
+    UsersGroupsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        title:
+          type: string
+    UsersGroupsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        lft:
+          type: integer
+        rgt:
+          type: integer
+        title:
+          type: string
+    UsersLevelsListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        rules:
+          type: string
+    UsersLevelsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        rules:
+          type: string
+    UsersUsersListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        group_count:
+          type: string
+        group_names:
+          type: string
+        registerDate:
+          type: string
+        lastvisitDate:
+          type: string
+        lastResetTime:
+          type: string
+        resetCount:
+          type: string
+        sendEmail:
+          type: string
+        block:
+          type: string
+    UsersUsersItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        groups:
+          type: string
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        registerDate:
+          type: string
+        lastvisitDate:
+          type: string
+        lastResetTime:
+          type: string
+        resetCount:
+          type: string
+        sendEmail:
+          type: string
+        block:
+          type: string
