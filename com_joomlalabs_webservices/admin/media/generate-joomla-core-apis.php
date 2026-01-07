@@ -107,10 +107,22 @@ class JoomlaCoreApisGenerator
             throw new RuntimeException('Webservices plugins path not found: ' . WEBSERVICES_PLUGINS_PATH);
         }
         
+        // Get list of enabled plugins from database (only if NOT showing all)
+        $enabledPlugins = [];
+        if (!$this->includeAll) {
+            $enabledPlugins = $this->getEnabledWebservicesPlugins();
+        }
+        
         $dirs = glob(WEBSERVICES_PLUGINS_PATH . '/*', GLOB_ONLYDIR);
         
         foreach ($dirs as $dir) {
             $pluginName = basename($dir);
+            
+            // Skip if not showing all and plugin is not enabled
+            if (!$this->includeAll && !in_array($pluginName, $enabledPlugins)) {
+                continue;
+            }
+            
             $extensionFile = $dir . '/src/Extension/' . ucfirst($pluginName) . '.php';
             
             if (!file_exists($extensionFile)) {
@@ -124,6 +136,41 @@ class JoomlaCoreApisGenerator
                 'routes' => $this->parsePluginRoutes($extensionFile),
             ];
         }
+    }
+    
+    /**
+     * Get list of enabled webservices plugins from Joomla database
+     */
+    private function getEnabledWebservicesPlugins(): array
+    {
+        $enabledPlugins = [];
+        
+        try {
+            // Only query database if we have Joomla framework loaded
+            if (!defined('_JEXEC')) {
+                return [];
+            }
+            
+            // Get database instance
+            $db = \Joomla\CMS\Factory::getContainer()->get(\Joomla\Database\DatabaseInterface::class);
+            
+            // Query enabled webservices plugins
+            $query = $db->getQuery(true)
+                ->select($db->quoteName('element'))
+                ->from($db->quoteName('#__extensions'))
+                ->where($db->quoteName('type') . ' = ' . $db->quote('plugin'))
+                ->where($db->quoteName('folder') . ' = ' . $db->quote('webservices'))
+                ->where($db->quoteName('enabled') . ' = 1');
+            
+            $db->setQuery($query);
+            $enabledPlugins = $db->loadColumn();
+            
+        } catch (\Exception $e) {
+            // If database query fails, return empty array (will show no plugins)
+            // In CLI mode without database connection, this is expected
+        }
+        
+        return $enabledPlugins;
     }
     
     /**

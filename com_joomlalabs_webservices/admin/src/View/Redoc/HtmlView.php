@@ -104,7 +104,7 @@ class HtmlView extends BaseHtmlView
             ],
             [
                 'name' => 'Generated (All Components)',
-                'url' => $baseUrl . '/media/com_joomlalabs_webservices/generate-joomla-core-apis.php?all=1'
+                'url' => $baseUrl . '/media/com_joomlalabs_webservices/generate-joomla-core-apis.php?showAll=true'
             ],
         ];
         
