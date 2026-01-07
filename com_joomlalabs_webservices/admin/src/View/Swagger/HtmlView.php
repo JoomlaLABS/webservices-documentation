@@ -124,14 +124,30 @@ class HtmlView extends BaseHtmlView
             $apiToken = '';
         }
         
+        // Build spec URLs - unified structure with Redoc
+        $specUrls = [
+            [
+                'value' => 'generated-active',
+                'name' => Text::_('COM_WEBSERVICES_SPEC_GENERATED_ACTIVE'),
+                'url' => $baseUrl . '/media/com_joomlalabs_webservices/generate-joomla-core-apis.php'
+            ],
+            [
+                'value' => 'generated-all',
+                'name' => Text::_('COM_WEBSERVICES_SPEC_GENERATED_ALL'),
+                'url' => $baseUrl . '/media/com_joomlalabs_webservices/generate-joomla-core-apis.php?showAll=true'
+            ],
+            [
+                'value' => 'static',
+                'name' => Text::_('COM_WEBSERVICES_SPEC_STATIC'),
+                'url' => $baseUrl . '/media/com_joomlalabs_webservices/joomla-core-apis.yaml'
+            ],
+        ];
+        
         // Pass options to JavaScript
         $doc->addScriptOptions('swagger-ui', [
             'baseUrl' => $baseUrl,
-            'specUrls' => [
-                'static' => 'joomla-core-apis.yaml',
-                'generated-active' => 'generate-joomla-core-apis.php',
-                'generated-all' => 'generate-joomla-core-apis.php?showAll=true',
-            ],
+            'specUrls' => $specUrls,
+            'defaultSpec' => $specUrls[0]['url'], // Default to generated active
             'apiToken' => $apiToken,
         ]);
     }

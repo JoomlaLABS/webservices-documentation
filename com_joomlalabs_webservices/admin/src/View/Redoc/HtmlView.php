@@ -90,27 +90,30 @@ class HtmlView extends BaseHtmlView
         // Get base URL
         $baseUrl = rtrim(Uri::root(), '/');
         
-        // Build spec URLs - use correct media path
+        // Build spec URLs - unified structure with Swagger
         $specUrls = [
             [
-                'name' => 'Static Spec',
-                'url' => $baseUrl . '/media/com_joomlalabs_webservices/joomla-core-apis.yaml'
-            ],
-            [
-                'name' => 'Generated (Active Plugins)',
+                'value' => 'generated-active',
+                'name' => Text::_('COM_WEBSERVICES_SPEC_GENERATED_ACTIVE'),
                 'url' => $baseUrl . '/media/com_joomlalabs_webservices/generate-joomla-core-apis.php'
             ],
             [
-                'name' => 'Generated (All Components)',
+                'value' => 'generated-all',
+                'name' => Text::_('COM_WEBSERVICES_SPEC_GENERATED_ALL'),
                 'url' => $baseUrl . '/media/com_joomlalabs_webservices/generate-joomla-core-apis.php?showAll=true'
+            ],
+            [
+                'value' => 'static',
+                'name' => Text::_('COM_WEBSERVICES_SPEC_STATIC'),
+                'url' => $baseUrl . '/media/com_joomlalabs_webservices/joomla-core-apis.yaml'
             ],
         ];
         
-        // Pass configuration to JavaScript
+        // Pass configuration to JavaScript (no API token needed - Redoc is documentation only)
         $doc->addScriptOptions('redoc', [
             'baseUrl' => $baseUrl,
             'specUrls' => $specUrls,
-            'defaultSpec' => $specUrls[0]['url'], // Default to static spec
+            'defaultSpec' => $specUrls[2]['url'], // Default to static
         ]);
     }
 }

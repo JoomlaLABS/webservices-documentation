@@ -116,18 +116,14 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
     
-    // Build the full URLs to the spec files
-    // After installation, media files are in media/com_joomlalabs_webservices/
-    const mediaPath = options.baseUrl + "/media/com_joomlalabs_webservices/";
-    const specUrls = {};
+    // Build a map of value -> url from the specUrls array
+    const specUrlMap = {};
+    options.specUrls.forEach(spec => {
+        specUrlMap[spec.value] = spec.url;
+    });
     
-    // Build URLs for each spec type
-    for (const [key, value] of Object.entries(options.specUrls)) {
-        specUrls[key] = mediaPath + value;
-    }
-    
-    // Default to generated-active spec
-    let currentSpecUrl = specUrls["generated-active"];
+    // Default to first spec (generated-active)
+    let currentSpecUrl = options.defaultSpec;
     
     // Function to initialize Swagger UI
     function initSwaggerUI(url) {
@@ -176,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (specSelector) {
         specSelector.addEventListener("change", function() {
             const selectedType = this.value;
-            currentSpecUrl = specUrls[selectedType];
+            currentSpecUrl = specUrlMap[selectedType];
             initSwaggerUI(currentSpecUrl);
         });
     }
@@ -192,9 +188,19 @@ document.addEventListener("DOMContentLoaded", function() {
                     <?php echo \Joomla\CMS\Language\Text::_('COM_WEBSERVICES_SELECT_SPEC'); ?>:
                 </label>
         <select id="spec-type-selector" class="form-select form-select-sm">
-            <option value="generated-active" selected>Generated (Active Plugins)</option>
-            <option value="generated-all">Generated (All Components)</option>
-            <option value="static">Static (Manual)</option>
+            <?php
+            $swaggerOptions = $doc->getScriptOptions('swagger-ui');
+            if ($swaggerOptions && isset($swaggerOptions['specUrls'])) :
+                foreach ($swaggerOptions['specUrls'] as $index => $spec) :
+            ?>
+                <option value="<?php echo htmlspecialchars($spec['value']); ?>" 
+                        <?php echo $index === 0 ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($spec['name']); ?>
+                </option>
+            <?php
+                endforeach;
+            endif;
+            ?>
         </select>
     </div>
 </div>
