@@ -1,0 +1,6101 @@
+openapi: 3.1.0
+info:
+  title: Joomla Core APIs
+  summary: Complete API documentation for Joomla Core APIs
+  description: REST API endpoints for Joomla Core components and features.
+  version: Joomla! 6.0.2
+  contact:
+    name: Joomla!LABS
+    url: https://github.com/JoomlaLABS
+  license:
+    name: GNU General Public License v2 or later
+    identifier: GPL-2.0-or-later
+    #url: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+
+servers:
+  - url: '/api/index.php/v1'
+    description: Current Joomla site
+
+tags:
+  - name: Banners
+    description: Operations related to banners
+  - name: Banners|Clients
+    description: Clients for banners
+  - name: Banners|Categories
+    description: Categories for banners
+  - name: Banners|Content History
+    description: Content history for banners
+  - name: Config|Application
+    description: Application for config
+  - name: Config|Component
+    description: Component for config
+  - name: Contact
+    description: Operations related to contact
+  - name: Contact|Categories
+    description: Categories for contact
+  - name: Contact|Fields|Contact
+    description: Contact fields for contact
+  - name: Contact|Fields|Mail
+    description: Mail fields for contact
+  - name: Contact|Fields|Categories
+    description: Categories fields for contact
+  - name: Contact|Fields|Groups|Contact
+    description: Contact field groups for contact
+  - name: Contact|Fields|Groups|Mail
+    description: Mail field groups for contact
+  - name: Contact|Fields|Groups|Categories
+    description: Categories field groups for contact
+  - name: Contact|Form
+    description: Form for contact
+  - name: Contact|Content History
+    description: Content history for contact
+  - name: Content|Articles
+    description: Articles for content
+  - name: Content|Categories
+    description: Categories for content
+  - name: Content
+    description: Operations related to content
+  - name: Content|Fields|Articles
+    description: Articles fields for content
+  - name: Content|Fields|Categories
+    description: Categories fields for content
+  - name: Content|Fields|Groups|Articles
+    description: Articles field groups for content
+  - name: Content|Fields|Groups|Categories
+    description: Categories field groups for content
+  - name: Content|Content History
+    description: Content history for content
+  - name: Installer|Extensions
+    description: Extensions for installer
+  - name: Joomlaupdate|Healthcheck
+    description: Healthcheck for joomlaupdate
+  - name: Joomlaupdate|GetUpdate
+    description: GetUpdate for joomlaupdate
+  - name: Joomlaupdate|PrepareUpdate
+    description: PrepareUpdate for joomlaupdate
+  - name: Joomlaupdate|FinalizeUpdate
+    description: FinalizeUpdate for joomlaupdate
+  - name: Joomlaupdate|NotificationSuccess
+    description: NotificationSuccess for joomlaupdate
+  - name: Joomlaupdate|NotificationFailed
+    description: NotificationFailed for joomlaupdate
+  - name: Languages|Content
+    description: Content for languages
+  - name: Languages
+    description: Operations related to languages
+  - name: Languages|Overrides|Search
+    description: Search for languages
+  - name: Languages|Overrides|Search|Cache|Refresh
+    description: Refresh for languages
+  - name: Media
+    description: Operations related to media
+  - name: Menus|Site
+    description: Site for menus
+  - name: Menus|Administrator
+    description: Administrator for menus
+  - name: Menus|Site|Items
+    description: Items for menus
+  - name: Menus|Administrator|Items
+    description: Items for menus
+  - name: Menus|Site|Items|Types
+    description: Types for menus
+  - name: Menus|Administrator|Items|Types
+    description: Types for menus
+  - name: Messages
+    description: Operations related to messages
+  - name: Modules|Site
+    description: Site for modules
+  - name: Modules|Administrator
+    description: Administrator for modules
+  - name: Modules|Types|Site
+    description: Site for modules
+  - name: Modules|Types|Administrator
+    description: Administrator for modules
+  - name: Newsfeeds|Feeds
+    description: Feeds for newsfeeds
+  - name: Newsfeeds|Categories
+    description: Categories for newsfeeds
+  - name: Plugins
+    description: Operations related to plugins
+  - name: Privacy|Requests
+    description: Requests for privacy
+  - name: Privacy|Requests|Export
+    description: Export for privacy
+  - name: Privacy|Consents
+    description: Consents for privacy
+  - name: Redirect
+    description: Operations related to redirect
+  - name: Tags
+    description: Operations related to tags
+  - name: Templates|Styles|Site
+    description: Site for templates
+  - name: Templates|Styles|Administrator
+    description: Administrator for templates
+  - name: Users
+    description: Operations related to users
+  - name: Users|Groups
+    description: Groups for users
+  - name: Users|Levels
+    description: Levels for users
+  - name: Users|Fields
+    description: Custom fields for users
+  - name: Users|Fields|Users
+    description: Users fields for users
+
+paths:
+  /banners:
+    get:
+      summary: Get list of banners
+      tags:
+        - Banners
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in banners
+      tags:
+        - Banners
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /banners/{id}:
+    get:
+      summary: Get single item from banners
+      tags:
+        - Banners
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in banners
+      tags:
+        - Banners
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from banners
+      tags:
+        - Banners
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /banners/clients:
+    get:
+      summary: Get list of clients
+      tags:
+        - Banners|Clients
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in clients
+      tags:
+        - Banners|Clients
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /banners/clients/{id}:
+    get:
+      summary: Get single item from clients
+      tags:
+        - Banners|Clients
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in clients
+      tags:
+        - Banners|Clients
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from clients
+      tags:
+        - Banners|Clients
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /banners/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Banners|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Banners|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /banners/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Banners|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Banners|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Banners|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /banners/{id}/contenthistory:
+    get:
+      summary: DisplayList
+      tags:
+        - Banners|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    delete:
+      summary: Delete
+      tags:
+        - Banners|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /banners/{id}/contenthistory/keep:
+    patch:
+      summary: Keep
+      tags:
+        - Banners|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /config/application:
+    get:
+      summary: DisplayList
+      tags:
+        - Config|Application
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    patch:
+      summary: Edit
+      tags:
+        - Config|Application
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /config/{component_name}:
+    get:
+      summary: DisplayList
+      tags:
+        - Config|Component
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: component_name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    patch:
+      summary: Edit
+      tags:
+        - Config|Component
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: component_name
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /contacts:
+    get:
+      summary: Get list of contacts
+      tags:
+        - Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in contacts
+      tags:
+        - Contact
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /contacts/{id}:
+    get:
+      summary: Get single item from contacts
+      tags:
+        - Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in contacts
+      tags:
+        - Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from contacts
+      tags:
+        - Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /contacts/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Contact|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Contact|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /contacts/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Contact|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Contact|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Contact|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/contacts/contact:
+    get:
+      summary: Get list of contact
+      tags:
+        - Contact|Fields|Contact
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in contact
+      tags:
+        - Contact|Fields|Contact
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/contacts/contact/{id}:
+    get:
+      summary: Get single item from contact
+      tags:
+        - Contact|Fields|Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in contact
+      tags:
+        - Contact|Fields|Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from contact
+      tags:
+        - Contact|Fields|Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/contacts/mail:
+    get:
+      summary: Get list of mail
+      tags:
+        - Contact|Fields|Mail
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in mail
+      tags:
+        - Contact|Fields|Mail
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/contacts/mail/{id}:
+    get:
+      summary: Get single item from mail
+      tags:
+        - Contact|Fields|Mail
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in mail
+      tags:
+        - Contact|Fields|Mail
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from mail
+      tags:
+        - Contact|Fields|Mail
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/contacts/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Contact|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Contact|Fields|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/contacts/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Contact|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Contact|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Contact|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/groups/contacts/contact:
+    get:
+      summary: Get list of contact
+      tags:
+        - Contact|Fields|Groups|Contact
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in contact
+      tags:
+        - Contact|Fields|Groups|Contact
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/groups/contacts/contact/{id}:
+    get:
+      summary: Get single item from contact
+      tags:
+        - Contact|Fields|Groups|Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in contact
+      tags:
+        - Contact|Fields|Groups|Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from contact
+      tags:
+        - Contact|Fields|Groups|Contact
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/groups/contacts/mail:
+    get:
+      summary: Get list of mail
+      tags:
+        - Contact|Fields|Groups|Mail
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in mail
+      tags:
+        - Contact|Fields|Groups|Mail
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/groups/contacts/mail/{id}:
+    get:
+      summary: Get single item from mail
+      tags:
+        - Contact|Fields|Groups|Mail
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in mail
+      tags:
+        - Contact|Fields|Groups|Mail
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from mail
+      tags:
+        - Contact|Fields|Groups|Mail
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/groups/contacts/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Contact|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Contact|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/groups/contacts/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Contact|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Contact|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Contact|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /contacts/form/{id}:
+    post:
+      summary: SubmitForm
+      tags:
+        - Contact|Form
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /contacts/{id}/contenthistory:
+    get:
+      summary: DisplayList
+      tags:
+        - Contact|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    delete:
+      summary: Delete
+      tags:
+        - Contact|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /contacts/{id}/contenthistory/keep:
+    patch:
+      summary: Keep
+      tags:
+        - Contact|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /content/articles:
+    get:
+      summary: Get list of articles
+      tags:
+        - Content|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[author]
+          in: query
+          description: Filter by author ID
+          schema:
+            type: integer
+        - name: filter[category]
+          in: query
+          description: Filter by category ID
+          schema:
+            type: integer
+        - name: filter[search]
+          in: query
+          description: Search term
+          schema:
+            type: string
+        - name: filter[state]
+          in: query
+          description: Filter by publication status
+          schema:
+            type: integer
+        - name: filter[featured]
+          in: query
+          description: Filter by featured status (1 = featured, 0 = not featured)
+          schema:
+            type: integer
+        - name: filter[tag]
+          in: query
+          description: Filter by tag ID
+          schema:
+            type: integer
+        - name: filter[language]
+          in: query
+          description: Language code
+          schema:
+            type: string
+        - name: filter[modified_start]
+          in: query
+          description: Filter articles modified after this date (ISO 8601 format)
+          schema:
+            type: string
+        - name: filter[modified_end]
+          in: query
+          description: Filter articles modified before this date (ISO 8601 format)
+          schema:
+            type: string
+        - name: filter[checked_out]
+          in: query
+          description: Filter by checked out status
+          schema:
+            type: integer
+        - name: list[ordering]
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: list[direction]
+          in: query
+          description: Sort direction (ASC or DESC)
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in articles
+      tags:
+        - Content|Articles
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /content/articles/{id}:
+    get:
+      summary: Get single item from articles
+      tags:
+        - Content|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in articles
+      tags:
+        - Content|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from articles
+      tags:
+        - Content|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /content/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Content|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Content|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /content/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Content|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Content|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Content|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/content/articles:
+    get:
+      summary: Get list of articles
+      tags:
+        - Content|Fields|Articles
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in articles
+      tags:
+        - Content|Fields|Articles
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/content/articles/{id}:
+    get:
+      summary: Get single item from articles
+      tags:
+        - Content|Fields|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in articles
+      tags:
+        - Content|Fields|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from articles
+      tags:
+        - Content|Fields|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/content/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Content|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Content|Fields|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/content/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Content|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Content|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Content|Fields|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/groups/content/articles:
+    get:
+      summary: Get list of articles
+      tags:
+        - Content|Fields|Groups|Articles
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in articles
+      tags:
+        - Content|Fields|Groups|Articles
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/groups/content/articles/{id}:
+    get:
+      summary: Get single item from articles
+      tags:
+        - Content|Fields|Groups|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in articles
+      tags:
+        - Content|Fields|Groups|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from articles
+      tags:
+        - Content|Fields|Groups|Articles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/groups/content/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Content|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Content|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/groups/content/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Content|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Content|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Content|Fields|Groups|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /content/articles/{id}/contenthistory:
+    get:
+      summary: DisplayList
+      tags:
+        - Content|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    delete:
+      summary: Delete
+      tags:
+        - Content|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /content/articles/{id}/contenthistory/keep:
+    patch:
+      summary: Keep
+      tags:
+        - Content|Content History
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /extensions:
+    get:
+      summary: DisplayList
+      tags:
+        - Installer|Extensions
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[core]
+          in: query
+          description: Filter by core
+          schema:
+            type: string
+        - name: filter[status]
+          in: query
+          description: Filter by status
+          schema:
+            type: string
+        - name: filter[type]
+          in: query
+          description: Filter by type
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /joomlaupdate/healthcheck:
+    get:
+      summary: Show
+      tags:
+        - Joomlaupdate|Healthcheck
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /joomlaupdate/getUpdate:
+    get:
+      summary: GetUpdate
+      tags:
+        - Joomlaupdate|GetUpdate
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /joomlaupdate/prepareUpdate:
+    post:
+      summary: PrepareUpdate
+      tags:
+        - Joomlaupdate|PrepareUpdate
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /joomlaupdate/finalizeUpdate:
+    post:
+      summary: FinalizeUpdate
+      tags:
+        - Joomlaupdate|FinalizeUpdate
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /joomlaupdate/notificationSuccess:
+    post:
+      summary: Success
+      tags:
+        - Joomlaupdate|NotificationSuccess
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /joomlaupdate/notificationFailed:
+    post:
+      summary: Failed
+      tags:
+        - Joomlaupdate|NotificationFailed
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /languages/content:
+    get:
+      summary: Get list of content
+      tags:
+        - Languages|Content
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in content
+      tags:
+        - Languages|Content
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /languages/content/{id}:
+    get:
+      summary: Get single item from content
+      tags:
+        - Languages|Content
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in content
+      tags:
+        - Languages|Content
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from content
+      tags:
+        - Languages|Content
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /languages/overrides/search:
+    post:
+      summary: Search
+      tags:
+        - Languages|Overrides|Search
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /languages/overrides/search/cache/refresh:
+    post:
+      summary: Refresh
+      tags:
+        - Languages|Overrides|Search|Cache|Refresh
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /languages:
+    get:
+      summary: DisplayList
+      tags:
+        - Languages
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Install
+      tags:
+        - Languages
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /menus/site:
+    get:
+      summary: Get list of site
+      tags:
+        - Menus|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[client_id]
+          in: query
+          description: Filter by client_id
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in site
+      tags:
+        - Menus|Site
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /menus/site/{id}:
+    get:
+      summary: Get single item from site
+      tags:
+        - Menus|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in site
+      tags:
+        - Menus|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from site
+      tags:
+        - Menus|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /menus/administrator:
+    get:
+      summary: Get list of administrator
+      tags:
+        - Menus|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[client_id]
+          in: query
+          description: Filter by client_id
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in administrator
+      tags:
+        - Menus|Administrator
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /menus/administrator/{id}:
+    get:
+      summary: Get single item from administrator
+      tags:
+        - Menus|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in administrator
+      tags:
+        - Menus|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from administrator
+      tags:
+        - Menus|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /menus/site/items:
+    get:
+      summary: Get list of items
+      tags:
+        - Menus|Site|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[menutype]
+          in: query
+          description: Filter by menutype
+          schema:
+            type: string
+        - name: filter[client_id]
+          in: query
+          description: Filter by client_id
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in items
+      tags:
+        - Menus|Site|Items
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /menus/site/items/{id}:
+    get:
+      summary: Get single item from items
+      tags:
+        - Menus|Site|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in items
+      tags:
+        - Menus|Site|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from items
+      tags:
+        - Menus|Site|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /menus/administrator/items:
+    get:
+      summary: Get list of items
+      tags:
+        - Menus|Administrator|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[menutype]
+          in: query
+          description: Filter by menutype
+          schema:
+            type: string
+        - name: filter[client_id]
+          in: query
+          description: Filter by client_id
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in items
+      tags:
+        - Menus|Administrator|Items
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /menus/administrator/items/{id}:
+    get:
+      summary: Get single item from items
+      tags:
+        - Menus|Administrator|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in items
+      tags:
+        - Menus|Administrator|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from items
+      tags:
+        - Menus|Administrator|Items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /menus/site/items/types:
+    get:
+      summary: GetTypes
+      tags:
+        - Menus|Site|Items|Types
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /menus/administrator/items/types:
+    get:
+      summary: GetTypes
+      tags:
+        - Menus|Administrator|Items|Types
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /messages:
+    get:
+      summary: Get list of messages
+      tags:
+        - Messages
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in messages
+      tags:
+        - Messages
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /messages/{id}:
+    get:
+      summary: Get single item from messages
+      tags:
+        - Messages
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in messages
+      tags:
+        - Messages
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from messages
+      tags:
+        - Messages
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /modules/site:
+    get:
+      summary: Get list of site
+      tags:
+        - Modules|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in site
+      tags:
+        - Modules|Site
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /modules/site/{id}:
+    get:
+      summary: Get single item from site
+      tags:
+        - Modules|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in site
+      tags:
+        - Modules|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from site
+      tags:
+        - Modules|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /modules/administrator:
+    get:
+      summary: Get list of administrator
+      tags:
+        - Modules|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in administrator
+      tags:
+        - Modules|Administrator
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /modules/administrator/{id}:
+    get:
+      summary: Get single item from administrator
+      tags:
+        - Modules|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in administrator
+      tags:
+        - Modules|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from administrator
+      tags:
+        - Modules|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /modules/types/site:
+    get:
+      summary: GetTypes
+      tags:
+        - Modules|Types|Site
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /modules/types/administrator:
+    get:
+      summary: GetTypes
+      tags:
+        - Modules|Types|Administrator
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /newsfeeds/feeds:
+    get:
+      summary: Get list of feeds
+      tags:
+        - Newsfeeds|Feeds
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in feeds
+      tags:
+        - Newsfeeds|Feeds
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /newsfeeds/feeds/{id}:
+    get:
+      summary: Get single item from feeds
+      tags:
+        - Newsfeeds|Feeds
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in feeds
+      tags:
+        - Newsfeeds|Feeds
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from feeds
+      tags:
+        - Newsfeeds|Feeds
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /newsfeeds/categories:
+    get:
+      summary: Get list of categories
+      tags:
+        - Newsfeeds|Categories
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in categories
+      tags:
+        - Newsfeeds|Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /newsfeeds/categories/{id}:
+    get:
+      summary: Get single item from categories
+      tags:
+        - Newsfeeds|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in categories
+      tags:
+        - Newsfeeds|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from categories
+      tags:
+        - Newsfeeds|Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /plugins:
+    get:
+      summary: DisplayList
+      tags:
+        - Plugins
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[element]
+          in: query
+          description: Filter by element
+          schema:
+            type: string
+        - name: filter[enabled]
+          in: query
+          description: Filter by enabled
+          schema:
+            type: string
+        - name: filter[search]
+          in: query
+          description: Search term
+          schema:
+            type: string
+        - name: filter[folder]
+          in: query
+          description: Filter by folder
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /plugins/{id}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Plugins
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Edit
+      tags:
+        - Plugins
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /privacy/requests:
+    get:
+      summary: DisplayList
+      tags:
+        - Privacy|Requests
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Add
+      tags:
+        - Privacy|Requests
+      security:
+        - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /privacy/requests/{id}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Privacy|Requests
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /privacy/requests/export/{id}:
+    get:
+      summary: Export
+      tags:
+        - Privacy|Requests|Export
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /privacy/consents:
+    get:
+      summary: DisplayList
+      tags:
+        - Privacy|Consents
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /privacy/consents/{id}:
+    get:
+      summary: DisplayItem
+      tags:
+        - Privacy|Consents
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /redirects:
+    get:
+      summary: Get list of redirects
+      tags:
+        - Redirect
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in redirects
+      tags:
+        - Redirect
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /redirects/{id}:
+    get:
+      summary: Get single item from redirects
+      tags:
+        - Redirect
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in redirects
+      tags:
+        - Redirect
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from redirects
+      tags:
+        - Redirect
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /tags:
+    get:
+      summary: Get list of tags
+      tags:
+        - Tags
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[search]
+          in: query
+          description: Search term
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in tags
+      tags:
+        - Tags
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /tags/{id}:
+    get:
+      summary: Get single item from tags
+      tags:
+        - Tags
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in tags
+      tags:
+        - Tags
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from tags
+      tags:
+        - Tags
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /templates/styles/site:
+    get:
+      summary: Get list of site
+      tags:
+        - Templates|Styles|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in site
+      tags:
+        - Templates|Styles|Site
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /templates/styles/site/{id}:
+    get:
+      summary: Get single item from site
+      tags:
+        - Templates|Styles|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in site
+      tags:
+        - Templates|Styles|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from site
+      tags:
+        - Templates|Styles|Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /templates/styles/administrator:
+    get:
+      summary: Get list of administrator
+      tags:
+        - Templates|Styles|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in administrator
+      tags:
+        - Templates|Styles|Administrator
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /templates/styles/administrator/{id}:
+    get:
+      summary: Get single item from administrator
+      tags:
+        - Templates|Styles|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in administrator
+      tags:
+        - Templates|Styles|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from administrator
+      tags:
+        - Templates|Styles|Administrator
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /users:
+    get:
+      summary: Get list of users
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter[state]
+          in: query
+          description: Publication state (1 = published, 0 = unpublished)
+          schema:
+            type: integer
+        - name: filter[active]
+          in: query
+          description: Filter by active
+          schema:
+            type: string
+        - name: filter[group_id]
+          in: query
+          description: Filter by group_id
+          schema:
+            type: string
+        - name: filter[search]
+          in: query
+          description: Search term
+          schema:
+            type: string
+        - name: filter[registrationDateStart]
+          in: query
+          description: Filter by registrationDateStart
+          schema:
+            type: string
+        - name: filter[registrationDateEnd]
+          in: query
+          description: Filter by registrationDateEnd
+          schema:
+            type: string
+        - name: filter[lastVisitStart]
+          in: query
+          description: Filter by lastVisitStart
+          schema:
+            type: string
+        - name: filter[lastVisitEnd]
+          in: query
+          description: Filter by lastVisitEnd
+          schema:
+            type: string
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in users
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /users/{id}:
+    get:
+      summary: Get single item from users
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in users
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from users
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /users/groups:
+    get:
+      summary: Get list of groups
+      tags:
+        - Users|Groups
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in groups
+      tags:
+        - Users|Groups
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /users/groups/{id}:
+    get:
+      summary: Get single item from groups
+      tags:
+        - Users|Groups
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in groups
+      tags:
+        - Users|Groups
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from groups
+      tags:
+        - Users|Groups
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /users/levels:
+    get:
+      summary: Get list of levels
+      tags:
+        - Users|Levels
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in levels
+      tags:
+        - Users|Levels
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /users/levels/{id}:
+    get:
+      summary: Get single item from levels
+      tags:
+        - Users|Levels
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in levels
+      tags:
+        - Users|Levels
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from levels
+      tags:
+        - Users|Levels
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/users:
+    get:
+      summary: Get list of users
+      tags:
+        - Users|Fields
+      security:
+        - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in users
+      tags:
+        - Users|Fields
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/users/{id}:
+    get:
+      summary: Get single item from users
+      tags:
+        - Users|Fields
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in users
+      tags:
+        - Users|Fields
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from users
+      tags:
+        - Users|Fields
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+  /fields/groups/users:
+    get:
+      summary: Get list of users
+      tags:
+        - Users|Fields|Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page[limit]
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 20
+        - name: page[offset]
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      summary: Create new item in users
+      tags:
+        - Users|Fields|Users
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+  /fields/groups/users/{id}:
+    get:
+      summary: Get single item from users
+      tags:
+        - Users|Fields|Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update item in users
+      tags:
+        - Users|Fields|Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+    delete:
+      summary: Delete item from users
+      tags:
+        - Users|Fields|Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Server error
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for API authentication
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string

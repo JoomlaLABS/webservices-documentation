@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" method="upgrade">
+    <name>COM_JOOMLALABS_WEBSERVICES</name>
+    <creationDate>@date@</creationDate>
+    <author>Joomla!LABS</author>
+    <authorEmail>info@joomlalabs.com</authorEmail>
+    <authorUrl>https://joomlalabs.com</authorUrl>
+    <copyright>Copyright (C) 2015 - 2026 Joomla!LABS. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>@version@</version>
+    <description>COM_JOOMLALABS_WEBSERVICES_XML_DESCRIPTION</description>
+
+    <namespace path="src">Joomla\Component\JoomlalabsWebservices</namespace>
+
+    <administration>
+        <files folder="admin">
+            <folder>language</folder>
+            <folder>services</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+        </files>
+    </administration>
+
+    <languages folder="admin">
+        <language tag="en-GB">language/en-GB/com_joomlalabs_webservices.ini</language>
+        <language tag="en-GB">language/en-GB/com_joomlalabs_webservices.sys.ini</language>
+    </languages>
+
+    <!-- Media files (Swagger UI assets and OpenAPI specs) -->
+    <media destination="com_joomlalabs_webservices" folder="admin/media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <filename>joomla-core-apis.yaml</filename>
+        <filename>generate-joomla-core-apis.php</filename>
+    </media>
+
+</extension>
