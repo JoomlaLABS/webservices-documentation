@@ -145,7 +145,7 @@ class HtmlView extends BaseHtmlView
         
         // Check if user is logged in
         if ($user->guest) {
-            throw new \Exception('User must be logged in to generate API token');
+            throw new \Exception(Text::_('COM_WEBSERVICES_ERROR_NOT_LOGGED_IN'));
         }
         
         $userId = $user->id;

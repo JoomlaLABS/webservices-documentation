@@ -118,56 +118,71 @@ class HtmlView extends BaseHtmlView
     }
     
     /**
-     * Get or create an API token for the current user
+     * Get API token for current user
      *
      * @return  string  The API token
      *
+     * @throws  \Exception  If token cannot be generated
      * @since   1.0.0
-     * @throws  \Exception
      */
-    protected function getApiToken(): string
+    private function getApiToken(): string
     {
-        $user = Factory::getApplication()->getIdentity();
+        $app = Factory::getApplication();
+        $user = $app->getIdentity();
         
+        // Check if user is logged in
         if ($user->guest) {
             throw new \Exception(Text::_('COM_WEBSERVICES_ERROR_NOT_LOGGED_IN'));
         }
         
+        $userId = $user->id;
+        
+        // Get database instance
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         
-        // Check if user already has a token
+        // Get site secret from configuration
+        $siteSecret = $app->get('secret');
+        
+        // Get table prefix
+        $prefix = $db->getPrefix();
+        
+        // Query to get token_seed and token_enabled from user_profiles
         $query = $db->getQuery(true)
-            ->select($db->quoteName('token'))
-            ->from($db->quoteName('#__user_keys'))
-            ->where($db->quoteName('user_id') . ' = ' . (int) $user->id)
-            ->where($db->quoteName('series') . ' = ' . $db->quote('api-token'));
+            ->select([
+                $db->quoteName('up_token.profile_value', 'token_seed'),
+                $db->quoteName('up_enabled.profile_value', 'token_enabled')
+            ])
+            ->from($db->quoteName('#__users', 'u'))
+            ->leftJoin(
+                $db->quoteName('#__user_profiles', 'up_token'),
+                $db->quoteName('u.id') . ' = ' . $db->quoteName('up_token.user_id') . 
+                ' AND ' . $db->quoteName('up_token.profile_key') . ' = ' . $db->quote('joomlatoken.token')
+            )
+            ->leftJoin(
+                $db->quoteName('#__user_profiles', 'up_enabled'),
+                $db->quoteName('u.id') . ' = ' . $db->quoteName('up_enabled.user_id') . 
+                ' AND ' . $db->quoteName('up_enabled.profile_key') . ' = ' . $db->quote('joomlatoken.enabled')
+            )
+            ->where($db->quoteName('u.id') . ' = ' . (int) $userId);
         
         $db->setQuery($query);
-        $token = $db->loadResult();
+        $result = $db->loadObject();
         
-        if ($token) {
-            return $token;
+        // Check if token_seed exists
+        if (!$result || !$result->token_seed) {
+            throw new \Exception(Text::sprintf('COM_JOOMLALABS_WEBSERVICES_ERROR_NO_TOKEN_CONFIGURED', $user->username));
         }
         
-        // Generate new token
-        $token = bin2hex(random_bytes(32));
+        // Check if token is enabled
+        if ($result->token_enabled != '1') {
+            throw new \Exception(Text::sprintf('COM_JOOMLALABS_WEBSERVICES_ERROR_TOKEN_DISABLED', $user->username));
+        }
         
-        // Insert the token
-        $data = [
-            'user_id' => (int) $user->id,
-            'series' => 'api-token',
-            'token' => $token,
-            'time' => time(),
-        ];
+        // Generate bearer token using HMAC
+        $algorithm = 'sha256';
+        $tokenHMAC = hash_hmac($algorithm, base64_decode($result->token_seed), $siteSecret);
+        $bearerToken = base64_encode("$algorithm:{$userId}:$tokenHMAC");
         
-        $query = $db->getQuery(true)
-            ->insert($db->quoteName('#__user_keys'))
-            ->columns($db->quoteName(array_keys($data)))
-            ->values(implode(',', array_map([$db, 'quote'], $data)));
-        
-        $db->setQuery($query);
-        $db->execute();
-        
-        return $token;
+        return $bearerToken;
     }
 }
