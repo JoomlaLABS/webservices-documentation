@@ -13,6 +13,7 @@ namespace Joomla\Component\JoomlalabsWebservices\Administrator\View\Swagger;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseInterface;
@@ -53,7 +54,12 @@ class HtmlView extends BaseHtmlView
      */
     protected function addToolbar(): void
     {
+        $toolbar = Toolbar::getInstance();
+        
         ToolbarHelper::title(Text::_('COM_WEBSERVICES_SWAGGER_TITLE'), 'icon-code');
+        $toolbar->linkButton('book', 'COM_WEBSERVICES_REDOC_TITLE')
+            ->url('index.php?option=com_joomlalabs_webservices&view=redoc');
+        $toolbar->divider();
         ToolbarHelper::help('', false, 'https://help.joomla.org/proxy?keyref=J4.x:Joomla_Core_APIs&lang=en');
     }
     
