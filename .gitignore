@@ -1,0 +1,113 @@
+# Joomla API Documentation - Git Ignore
+
+# OS Generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.project
+.settings/
+nbproject/
+
+# PHP Storm
+.phpintel/
+*.iml
+
+# Backup files
+*.bak
+*.backup
+*_bck*.zip
+*.old
+
+# Composer
+/vendor/
+composer.phar
+composer.lock
+
+# Node modules (if used for development)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Logs
+*.log
+logs/
+error_log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.cache
+
+# Joomla specific
+configuration.php
+!configuration.php-dist
+cache/*
+!cache/index.html
+administrator/cache/*
+!administrator/cache/index.html
+logs/*
+!logs/index.html
+tmp/*
+!tmp/index.html
+
+# Generated files
+*.generated.yaml
+!joomla-core-apis.yaml
+
+# Build artifacts
+dist/
+build/
+*.zip
+!*.example.zip
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database dumps
+*.sql
+*.sqlite
+*.db
+
+# Media uploads (usually not version controlled)
+images/*
+!images/index.html
+!images/.gitkeep
+
+# API tokens and secrets
+*.key
+*.pem
+*.cert
+
+# Testing
+phpunit.xml
+!phpunit.xml.dist
+.phpunit.result.cache
+coverage/
+
+# Documentation build
+docs/_build/
+site/
+
+# Miscellaneous
+*.diff
+*.patch
+*.orig
+.sass-cache/
