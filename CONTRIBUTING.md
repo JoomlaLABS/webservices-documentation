@@ -211,10 +211,10 @@ By contributing, you agree that your contributions will be licensed under the **
 ## 📋 Documentation
 
 For complete documentation, see the official repository:
-- **[README.md](https://github.com/JoomlaLABS/webservices-documentation/blob/main/README.md)** - Full project documentation
-- **[INSTALLATION.md](https://github.com/JoomlaLABS/webservices-documentation/blob/main/INSTALLATION.md)** - Installation guide
-- **[CHANGELOG.md](https://github.com/JoomlaLABS/webservices-documentation/blob/main/CHANGELOG.md)** - Version history
-- **[CONTRIBUTING.md](https://github.com/JoomlaLABS/webservices-documentation/blob/main/CONTRIBUTING.md)** - Contribution guidelines
+- **[README](https://github.com/JoomlaLABS/webservices-documentation/blob/main/README.md)** - Full project documentation
+- **[INSTALLATION](https://github.com/JoomlaLABS/webservices-documentation/blob/main/INSTALLATION.md)** - Installation guide
+- **[CHANGELOG](https://github.com/JoomlaLABS/webservices-documentation/blob/main/CHANGELOG.md)** - Version history
+- **[CONTRIBUTING](https://github.com/JoomlaLABS/webservices-documentation/blob/main/CONTRIBUTING.md)** - Contribution guidelines
 
 ## 💬 Questions?
 
