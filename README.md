@@ -93,8 +93,7 @@ Perfect for developers building integrations, testing APIs, or documenting custo
 2. In Joomla Administrator, go to **System → Extensions → Install**
 3. Upload the component package: `com_joomlalabs_webservices.zip`
 4. Upload the module package: `mod_joomlalabs_webservices_helpmenu.zip`
-5. Upload the plugin package: `plg_system_joomlalabs_webservicesdashboard.zip`
-6. Enable the module and plugin from **System → Extensions → Manage**
+5. Enable the module and plugin from **System → Extensions → Manage**
 
 ### Initial Configuration
 
@@ -144,17 +143,6 @@ For detailed installation instructions, see [INSTALLATION](INSTALLATION.md).
 6. Fill in parameters
 7. Click "Execute"
 8. View response
-
-### Generating Custom Specs
-
-**Via Web Interface:**
-- Access: `[site-url]/media/com_joomlalabs_webservices/generate-joomla-core-apis.php`
-- Add `?all=1` to include all components
-
-**Via CLI:**
-```bash
-php [joomla-root]/media/com_joomlalabs_webservices/generate-joomla-core-apis.php
-```
 
 ## 🎨 Features Showcase
 
