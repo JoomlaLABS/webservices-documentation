@@ -138,7 +138,7 @@ const RedocThemes = {
       },
     },
     codeBlock: {
-      backgroundColor: '#1f2937',
+      backgroundColor: '#6d7d6d',
     },
     fab: {
       backgroundColor: '#1976d2',
@@ -179,6 +179,10 @@ const RedocThemes = {
         primary: '#fafafa',
         secondary: '#d4d4d8',
         light: '#3f3f46',
+      },
+      gray: {
+        50: '#27272a',
+        100: '#27272a',
       },
       http: {
         get: '#22c55e',
@@ -266,20 +270,22 @@ const RedocThemes = {
       gutter: '2px',
     },
     rightPanel: {
-      backgroundColor: '#27272a',
+      backgroundColor: '#18181b',
       width: '40%',
-      textColor: '#ffffff',
+      textColor: '#fafafa',
+      panelBackgroundColor: '#18181b',
       servers: {
         overlay: {
-          backgroundColor: '#27272a',
+          backgroundColor: '#18181b',
+          textColor: '#fafafa',
         },
         url: {
-          backgroundColor: '#18181b',
+          backgroundColor: '#27272a',
         },
       },
     },
     codeBlock: {
-      backgroundColor: '#18181b',
+      backgroundColor: '#282c34',
     },
     fab: {
       backgroundColor: '#52525b',
