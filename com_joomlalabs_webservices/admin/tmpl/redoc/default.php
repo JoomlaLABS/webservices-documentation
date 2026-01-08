@@ -20,6 +20,14 @@ use Joomla\CMS\Uri\Uri;
 $doc = Factory::getApplication()->getDocument();
 $wa  = $doc->getWebAssetManager();
 
+// Register and use Redoc themes script
+$wa->registerAndUseScript(
+    'redoc-themes',
+    'com_joomlalabs_webservices/redoc-themes.js',
+    [],
+    ['relative' => true, 'version' => 'auto']
+);
+
 // Add custom styles for Redoc
 $wa->addInlineStyle('
 /* Container for Redoc */
@@ -71,11 +79,6 @@ $wa->addInlineStyle('
     border-color: var(--bs-primary);
     box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
 }
-
-/* Dark mode compatibility */
-html.dark-mode #redoc-container {
-    background: #fff;
-}
 ');
 
 // Add inline JavaScript for Redoc initialization
@@ -96,11 +99,16 @@ document.addEventListener("DOMContentLoaded", function() {
     // Set initial state
     updateDarkMode();
     
-    // Watch for theme changes
+    // Watch for theme changes and reinitialize Redoc
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.type === "attributes" && mutation.attributeName === "data-bs-theme") {
                 updateDarkMode();
+                
+                // Reinitialize Redoc with new theme
+                const container = document.getElementById("redoc-container");
+                container.innerHTML = "";
+                initRedoc(currentSpecUrl);
             }
         });
     });
@@ -117,10 +125,23 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
     
+    if (!window.RedocThemes) {
+        console.error("Redoc themes not loaded");
+        return;
+    }
+    
     let currentSpecUrl = options.defaultSpec;
     
-    // Initialize Redoc with default spec
+    // Function to get current theme based on Bootstrap theme
+    function getCurrentTheme() {
+        const isDark = htmlElement.getAttribute("data-bs-theme") === "dark";
+        return isDark ? window.RedocThemes.dark : window.RedocThemes.light;
+    }
+    
+    // Initialize Redoc with spec and current theme
     function initRedoc(specUrl) {
+        const theme = getCurrentTheme();
+        
         Redoc.init(
             specUrl,
             {
@@ -135,19 +156,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 pathInMiddlePanel: true,
                 requiredPropsFirst: true,
                 sortPropsAlphabetically: true,
-                theme: {
-                    colors: {
-                        primary: {
-                            main: "#1976d2"
-                        }
-                    },
-                    typography: {
-                        fontSize: "14px",
-                        headings: {
-                            fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
-                        }
-                    }
-                }
+                theme: theme
             },
             document.getElementById("redoc-container")
         );
