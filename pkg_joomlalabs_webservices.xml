@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <extension type="package" method="upgrade">
-    <name>joomlalabs_webservices_documentation</name>
+    <name>Joomla!LABS Web Services Documentation</name>
 	<creationDate>@date@</creationDate>
     <author>Joomla!LABS</author>
     <authorEmail>info@joomlalabs.com</authorEmail>
