@@ -19,6 +19,6 @@
     </files>
 
     <updateservers>
-        <server type="extension" priority="1" name="Joomla!LABS Webservices Documentation"></server>
+        <server type="extension" priority="1" name="Joomla!LABS Webservices Documentation">https://raw.githubusercontent.com/JoomlaLABS/updateservers/main/pkg_joomlalabs_webservices_documentation.xml</server>
     </updateservers>
 </extension>
