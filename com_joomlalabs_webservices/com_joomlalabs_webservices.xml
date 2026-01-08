@@ -26,7 +26,7 @@
         <language tag="en-GB">language/en-GB/com_joomlalabs_webservices.sys.ini</language>
     </languages>
 
-    <!-- Media files (Swagger UI assets and OpenAPI specs) -->
+    <!-- Media files (UI assets and OpenAPI specs) -->
     <media destination="com_joomlalabs_webservices" folder="admin/media">
         <folder>css</folder>
         <folder>js</folder>

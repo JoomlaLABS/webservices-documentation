@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="administrator" method="upgrade">
     <name>MOD_JOOMLALABS_WEBSERVICES_HELPMENU</name>
+    <creationDate>@date@</creationDate>
     <author>Joomla!LABS</author>
-    <creationDate>January 2026</creationDate>
-    <copyright>(C) 2026 Joomla!LABS. All rights reserved.</copyright>
-    <license>GNU General Public License version 2 or later</license>
     <authorEmail>info@joomlalabs.com</authorEmail>
-    <authorUrl>www.joomlalabs.com</authorUrl>
-    <version>1.0.0</version>
+    <authorUrl>https://joomlalabs.com</authorUrl>
+    <copyright>Copyright (C) 2015 - 2026 Joomla!LABS. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later</license>
+    <version>@version@</version>
     <description>MOD_JOOMLALABS_WEBSERVICES_HELPMENU_XML_DESCRIPTION</description>
+
     <namespace path="src">Joomla\Module\JoomlalabsWebservicesHelpmenu</namespace>
+
     <scriptfile>script.php</scriptfile>
+
     <files>
         <folder module="mod_joomlalabs_webservices_helpmenu">services</folder>
         <folder>src</folder>
         <folder>tmpl</folder>
     </files>
+
     <languages>
         <language tag="en-GB">language/en-GB/mod_joomlalabs_webservices_helpmenu.ini</language>
         <language tag="en-GB">language/en-GB/mod_joomlalabs_webservices_helpmenu.sys.ini</language>
     </languages>
+
     <config>
         <fields name="params">
             <fieldset name="basic">
@@ -63,4 +68,5 @@
             </fieldset>
         </fields>
     </config>
+    
 </extension>

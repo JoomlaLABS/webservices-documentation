@@ -1,0 +1,96 @@
+<project name="joomlalabs_webservices" default="dist" basedir=".">
+
+	<property name="VERSION" value="1.0.0"/>
+	
+	<tstamp>
+        <format property="DATE" pattern="yyyy-MM-dd" />
+    </tstamp>
+	
+	<property name="build" value="_build" />
+	<property name="dist" value="_dist" />
+	<property name="constituents" value="${build}/constituents" />
+	<property name="filename" value="pkg_joomlalabs_webservices_v${VERSION}_j6.zip" />
+
+	<target name="init" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${constituents}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+	<target name="build-component-zip">
+		<!-- Copy Component to temp folder -->
+        <copy todir="${build}/temp_component">
+			<fileset dir="com_joomlalabs_webservices">
+				<exclude name="**/.git/**"/>
+				<exclude name="**/.gitignore"/>
+			</fileset>
+            <filterchain>
+                <replacetokens>
+                    <token key="version" value="${VERSION}" />
+                    <token key="date" value="${DATE}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+		
+		<!-- Create Component ZIP -->
+		<zip destfile="${constituents}/com_joomlalabs_webservices.zip">
+			<fileset dir="${build}/temp_component" />
+		</zip>
+		
+		<!-- Clean temp folder -->
+		<delete dir="${build}/temp_component" />
+    </target>
+	
+	<target name="build-module-zip">
+		<!-- Copy Module to temp folder -->
+        <copy todir="${build}/temp_module">
+			<fileset dir="mod_joomlalabs_webservices_helpmenu">
+				<exclude name="**/.git/**"/>
+				<exclude name="**/.gitignore"/>
+			</fileset>
+            <filterchain>
+                <replacetokens>
+                    <token key="version" value="${VERSION}" />
+                    <token key="date" value="${DATE}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+		
+		<!-- Create Module ZIP -->
+		<zip destfile="${constituents}/mod_joomlalabs_webservices_helpmenu.zip">
+			<fileset dir="${build}/temp_module" />
+		</zip>
+		
+		<!-- Clean temp folder -->
+		<delete dir="${build}/temp_module" />
+    </target>
+
+	<target name="copy-package-manifest">
+		<!-- Copy Package Manifest -->
+        <copy file="pkg_joomlalabs_webservices.xml" todir="${build}">
+            <filterchain>
+                <replacetokens>
+                    <token key="version" value="${VERSION}" />
+                    <token key="date" value="${DATE}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+	</target>
+	
+	<target name="dist" depends="init, build-component-zip, build-module-zip, copy-package-manifest">
+		<!-- Create Package ZIP -->
+		<zip destfile="${dist}/${filename}">
+			<fileset dir="${build}/">
+				<include name="constituents/**" />
+				<include name="pkg_joomlalabs_webservices.xml" />
+			</fileset>
+		</zip>
+		
+		<echo message="Package created: ${dist}/${filename}" />
+	</target>
+
+	<target name="clean" description="Clean up build and dist directories">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+</project>

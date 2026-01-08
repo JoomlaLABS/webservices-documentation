@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="package" method="upgrade">
+    <name>joomlalabs_webservices_documentation</name>
+	<creationDate>@date@</creationDate>
+    <author>Joomla!LABS</author>
+    <authorEmail>info@joomlalabs.com</authorEmail>
+	<authorUrl>https://joomlalabs.com</authorUrl>
+	<copyright>Copyright (C) 2015 - 2025 Joomla!LABS. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<packagename>joomlalabs_webservices_documentation</packagename>
+    <packager>Joomla!LABS</packager>
+    <packagerurl>https://joomlalabs.com</packagerurl>
+	<version>@version@</version>
+    <description>Complete package for Joomla Web Services API documentation, including Swagger UI and Redoc viewers with dynamic OpenAPI specification generation.</description>
+
+    <files folder="constituents">
+        <file type="component" id="com_joomlalabs_webservices">com_joomlalabs_webservices.zip</file>
+        <file type="module" id="mod_joomlalabs_webservices_helpmenu" client="administrator">mod_joomlalabs_webservices_helpmenu.zip</file>
+    </files>
+
+    <updateservers>
+        <server type="extension" priority="1" name="Joomla!LABS Webservices Documentation"></server>
+    </updateservers>
+</extension>
