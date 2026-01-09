@@ -101,11 +101,11 @@ return new class () implements InstallerScriptInterface {
         // Set module style to "none" (System-none)
         $params = json_encode(['style' => 'System-none']);
 
-        // Assign to position icon-help with style none and custom title
+        // Assign to position cpanel-help with style none and custom title
         $query = $db->getQuery(true)
             ->update($db->quoteName('#__modules'))
             ->set($db->quoteName('title') . ' = ' . $db->quote('Web Services'))
-            ->set($db->quoteName('position') . ' = ' . $db->quote('icon-help'))
+            ->set($db->quoteName('position') . ' = ' . $db->quote('cpanel-help'))
             ->set($db->quoteName('ordering') . ' = 99')
             ->set($db->quoteName('params') . ' = ' . $db->quote($params))
             ->where($db->quoteName('id') . ' = ' . (int) $moduleId);
