@@ -533,7 +533,7 @@ class JoomlaCoreApisGenerator
             'category_id' => 'filter[category]',
             'published' => 'filter[state]',
             'checked_out' => 'filter[checked_out]',
-            'tag' => 'filter[tag]',
+            'tag' => 'filter[tag][]',
         ];
         
         if (isset($mapping[$filterName])) {
@@ -553,7 +553,12 @@ class JoomlaCoreApisGenerator
             return 'string';
         }
         
-        if (in_array($name, ['state', 'published', 'category', 'catid', 'category_id', 'author_id', 'tag', 'id', 'limit', 'offset', 'checked_out', 'featured', 'author'])) {
+        // Tag is an array parameter
+        if ($name === 'tag') {
+            return 'array';
+        }
+        
+        if (in_array($name, ['state', 'published', 'category', 'catid', 'category_id', 'author_id', 'id', 'limit', 'offset', 'checked_out', 'featured', 'author'])) {
             return 'integer';
         }
         
@@ -578,7 +583,7 @@ class JoomlaCoreApisGenerator
             'category_id' => 'Filter by category ID',
             'author' => 'Filter by author ID',
             'author_id' => 'Filter by author ID',
-            'tag' => 'Filter by tag ID',
+            'tag' => 'Filter by tag IDs (array of integers)',
             'language' => 'Language code',
             'ordering' => 'Field to sort by',
             'direction' => 'Sort direction (ASC or DESC)',
@@ -1039,6 +1044,13 @@ class JoomlaCoreApisGenerator
                 'schema' => ['type' => $filter['type']],
             ];
             
+            // For array types, add items definition, style, and explode
+            if ($filter['type'] === 'array') {
+                $param['schema']['items'] = ['type' => 'integer'];
+                $param['style'] = 'form';
+                $param['explode'] = true;
+            }
+            
             if (isset($filter['default'])) {
                 $param['schema']['default'] = $filter['default'];
             }
@@ -1456,6 +1468,12 @@ YAML;
         $yaml .= str_repeat(' ', $indent + 2) . "schema:\n";
         $yaml .= str_repeat(' ', $indent + 4) . "type: {$param['schema']['type']}\n";
         
+        // For array types, add items definition
+        if (isset($param['schema']['items'])) {
+            $yaml .= str_repeat(' ', $indent + 4) . "items:\n";
+            $yaml .= str_repeat(' ', $indent + 6) . "type: {$param['schema']['items']['type']}\n";
+        }
+        
         if (isset($param['schema']['default'])) {
             $yaml .= str_repeat(' ', $indent + 4) . "default: {$param['schema']['default']}\n";
         }
@@ -1465,6 +1483,16 @@ YAML;
             foreach ($param['schema']['enum'] as $value) {
                 $yaml .= str_repeat(' ', $indent + 6) . "- $value\n";
             }
+        }
+        
+        // Add style and explode for array parameters
+        if (isset($param['style'])) {
+            $yaml .= str_repeat(' ', $indent + 2) . "style: {$param['style']}\n";
+        }
+        
+        if (isset($param['explode'])) {
+            $explodeValue = $param['explode'] ? 'true' : 'false';
+            $yaml .= str_repeat(' ', $indent + 2) . "explode: $explodeValue\n";
         }
         
         return $yaml;

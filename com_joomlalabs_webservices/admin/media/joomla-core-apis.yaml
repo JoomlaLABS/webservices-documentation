@@ -1932,11 +1932,15 @@ paths:
           description: Filter by featured status (1 = featured, 0 = not featured)
           schema:
             type: integer
-        - name: filter[tag]
+        - name: filter[tag][]
           in: query
-          description: Filter by tag ID
+          description: Filter by tag IDs (array of integers)
           schema:
-            type: integer
+            type: array
+            items:
+              type: integer
+          style: form
+          explode: true
         - name: filter[language]
           in: query
           description: Language code
