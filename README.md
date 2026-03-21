@@ -1,6 +1,6 @@
-# Web Services Documentation for Joomla
+# Web Services Documentation for Joomla!
 
-![Image Webs Srvices Documentation](https://github.com/user-attachments/assets/90998e5e-dc08-419f-aa9a-cec829a1086e)
+![Webs Srvices Documentation for Joomla!](https://repository-images.githubusercontent.com/1129858055/e3da52cd-10ea-492b-94ea-e5ed5eb15cd3)
 
 ![GitHub all releases](https://img.shields.io/github/downloads/JoomlaLABS/webservices-documentation/total?style=for-the-badge&color=blue)
 ![GitHub release (latest by SemVer)](https://img.shields.io/github/downloads/JoomlaLABS/webservices-documentation/latest/total?style=for-the-badge&color=blue)
@@ -15,6 +15,14 @@
 **Web Services Documentation** is a comprehensive API documentation system for Joomla 6.0+. It provides interactive API documentation using **Swagger UI** and **Redoc**, with automatic **OpenAPI 3.1.0** specification generation from installed Joomla components.
 
 Perfect for developers building integrations, testing APIs, or documenting custom components. Features intelligent hierarchical navigation, dark mode support, and seamless Joomla admin integration.
+
+## 🖼️ Screenshots
+
+<p align="center">
+  <img src="https://joomlalabs.com/images/extensions/web_services_documentation-help.png" width="32%" />
+  <img src="https://joomlalabs.com/images/extensions/web_services_documentation-swagger.png" width="32%" />
+  <img src="https://joomlalabs.com/images/extensions/web_services_documentation-redoc.png" width="32%" />
+</p>
 
 ## ✨ Features
 
