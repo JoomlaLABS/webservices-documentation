@@ -6,9 +6,10 @@ Need help with Web Services Documentation? We're here for you! 🆘
 
 Before asking for help, please check:
 
-- **[README](README.md)** - Project overview and basic usage
-- **[INSTALLATION](INSTALLATION.md)** - Installation and setup instructions
-- **[CHANGELOG](CHANGELOG.md)** - Version history and changes
+- [README](README.md) - Project overview and usage
+- [INSTALLATION](INSTALLATION.md) - Installation and setup guide
+- [CHANGELOG](CHANGELOG.md) - Version history and recent changes
+- [CONTRIBUTING](CONTRIBUTING.md) - Contribution process and project structure
 
 ## 💬 Getting Help
 
@@ -47,10 +48,9 @@ For general questions, usage help, or discussions:
 
 ## 📧 Direct Contact
 
-For private inquiries, security issues, or business matters:
+For private inquiries, business questions, or security concerns:
 
-- **Email**: info@joomlalabs.com
-- **LinkedIn**: [Luca Racchetti](https://www.linkedin.com/in/razzo/)
+- Email: [info@joomlalabs.com](mailto:info@joomlalabs.com)
 
 ## 🔍 Common Issues
 
@@ -112,7 +112,7 @@ administrator/logs/
 
 If you'd like to help improve this project:
 
-- Read [CONTRIBUTING.md](CONTRIBUTING.md)
+- Read [CONTRIBUTING.md](CONTRIBUTING)
 - Check [open issues](https://github.com/JoomlaLABS/webservices-documentation/issues)
 - Submit pull requests with fixes or improvements
 
