@@ -1,6 +1,6 @@
 # Installation Instructions
 
-> **For production use, download from the official repository:** [JoomlaLABS/webservices-documentation](https://github.com/JoomlaLABS/webservices-documentation/releases)
+> **For production use, download from the official repository:** [GitHub Releases](https://github.com/JoomlaLABS/webservices-documentation/releases)
 
 ## Development Installation
 
